@@ -1,0 +1,4 @@
+Familiarize with existing open-source crypto inventory tools
+
+repo of semgrep (https://github.com/semgrep/semgrep)
+
