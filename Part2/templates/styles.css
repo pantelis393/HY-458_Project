@@ -1,0 +1,18 @@
+ body {
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #343a40;
+        }
+        .severity-critical {
+            background-color: #f8d7da !important;
+        }
+        .severity-high {
+            background-color: #fff3cd !important;
+        }
+        .severity-medium {
+            background-color: #d1ecf1 !important;
+        }
+        .severity-low {
+            background-color: #d4edda !important;
+        }

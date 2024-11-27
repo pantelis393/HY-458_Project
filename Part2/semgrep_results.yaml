@@ -1,0 +1,588 @@
+errors: []
+interfile_languages_used: []
+paths:
+  scanned:
+  - ../Part2/alex/SemGrep_test.py
+  - ../Part2/app.py
+  - ../Part2/runSemGrep.py
+  - ../Part2/runSemGrepWithDB.py
+  - ../Part2/test.py
+  - ../Part2/test_pantelis.py
+results:
+- check_id: insecure-cipher-algorithm-rc4
+  end:
+    col: 37
+    line: 8
+    offset: 288
+  extra:
+    engine_kind: OSS
+    fingerprint: 1e6ae4aa3b1d167385baff94e63ea71c90c520cf805a4efb1ffe4077717e437dd7a203554b7cea883ae12508c6ca1c76baac84bf45dd20b4477c1e1c063a6c08_0
+    is_ignored: false
+    lines: '    algorithm = algorithms.ARC4(key)'
+    message: 'Detected RC4 cipher algorithm which is considered insecure. The algorithm
+      has many
+
+      known vulnerabilities. Use AES instead.
+
+      '
+    metadata:
+      bandit-code: B304
+      category: security
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A3: Sensitive Data Exposure'
+      references:
+      - https://crypto.stackexchange.com/questions/853/google-is-using-rc4-but-isnt-rc4-considered-unsafe
+      - https://sweet32.info/
+      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L94
+      technology:
+      - cryptography
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/alex/SemGrep_test.py
+  start:
+    col: 17
+    line: 8
+    offset: 268
+- check_id: insecure-cipher-algorithm-blowfish
+  end:
+    col: 41
+    line: 15
+    offset: 590
+  extra:
+    engine_kind: OSS
+    fingerprint: d6a2ada56bcc3e6826a150f4e77fb6f9a4776c18547049e858167d043777f966eaef205fdddbd7b8b6b8e4e58bc825cf93ef71ca7c4148db6305b03d67cecb13_0
+    is_ignored: false
+    lines: '    algorithm = algorithms.Blowfish(key)'
+    message: 'Detected Blowfish cipher algorithm which is considered insecure. The
+      algorithm has many
+
+      known vulnerabilities. Use AES instead.
+
+      '
+    metadata:
+      bandit-code: B304
+      category: security
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A3: Sensitive Data Exposure'
+      references:
+      - https://sweet32.info/
+      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L96
+      technology:
+      - cryptography
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/alex/SemGrep_test.py
+  start:
+    col: 17
+    line: 15
+    offset: 566
+- check_id: insecure-cipher-algorithm-idea
+  end:
+    col: 37
+    line: 22
+    offset: 882
+  extra:
+    engine_kind: OSS
+    fingerprint: a0e069fb94d28966ea6902bbcaee55390d9c05e29528a46b4e1a54573c27292da1909b326556a601aefb73264609fcfe10863cbbbe4e0ebbef8cd1481adb4d05_0
+    is_ignored: false
+    lines: '    algorithm = algorithms.IDEA(key)'
+    message: 'Detected IDEA cipher algorithm which is considered insecure. The algorithm
+      is
+
+      considered weak and has been deprecated. Use AES instead.
+
+      '
+    metadata:
+      bandit-code: B304
+      category: security
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A3: Sensitive Data Exposure'
+      references:
+      - https://tools.ietf.org/html/rfc5469
+      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
+      technology:
+      - cryptography
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/alex/SemGrep_test.py
+  start:
+    col: 17
+    line: 22
+    offset: 862
+- check_id: detect-hardcoded-keys
+  end:
+    col: 30
+    line: 28
+    offset: 1103
+  extra:
+    engine_kind: OSS
+    fingerprint: 46c100dc89d1350432102c89b1f1112ca18ca06f0e4683991c72183d0ab9a6801a7b786279d514870f584a3f12548a4f48434526e718e40060eb90025beb3204_0
+    is_ignored: false
+    lines: '    key = b''sixteen byte key'''
+    message: Hard-coded cryptographic keys are insecure. Use secure key management
+      practices.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/alex/SemGrep_test.py
+  start:
+    col: 5
+    line: 28
+    offset: 1078
+- check_id: detect-md5
+  end:
+    col: 41
+    line: 10
+    offset: 252
+  extra:
+    engine_kind: OSS
+    fingerprint: 7795c332f4192e13366d1d5e0e7e1a3d99c880e005a5d2cb1d47b04d5279c8db9bc58b42cb8a97e576163de2eb9f6f9a98caf0e72019edc36d7277b1945acb8d_0
+    is_ignored: false
+    lines: '    hashed_md5 = hashlib.md5(b"example").hexdigest()'
+    message: Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 18
+    line: 10
+    offset: 229
+- check_id: detect-sha1
+  end:
+    col: 43
+    line: 13
+    offset: 331
+  extra:
+    engine_kind: OSS
+    fingerprint: 931fca81709e13f4fb24a7649046ad51ced034c9d56270663a2fa6cd56fbb8fbb38d5a40197ec13d79f301819a3f5a07746ba5533c82706bfd16c0009907da8c_0
+    is_ignored: false
+    lines: '    hashed_sha1 = hashlib.sha1(b"example").hexdigest()'
+    message: SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 19
+    line: 13
+    offset: 307
+- check_id: detect-sha2
+  end:
+    col: 47
+    line: 16
+    offset: 421
+  extra:
+    engine_kind: OSS
+    fingerprint: 3b6cebb996709043f47208f6c29f8d9200ddd58f87128ebca0dd15485b2cb4784ec6084f78964f05e3084cc358f3725c65586e03bc43c676c52a07ec775c2b2a_0
+    is_ignored: false
+    lines: '    hashed_sha256 = hashlib.sha256(b"example").hexdigest()'
+    message: SHA-256 has reduced security margin under Grover's algorithm. Consider
+      SHA-3 for longer-term security.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 21
+    line: 16
+    offset: 395
+- check_id: detect-des
+  end:
+    col: 52
+    line: 21
+    offset: 564
+  extra:
+    engine_kind: OSS
+    fingerprint: 95d4ce96a0e16379c97f7d1e248228032ffc731c00ef0d486e59ad61c4200050600c508e64b0d1f8004d2d37cc7d48dbefc0c000bb4479a7b408209bf5756147_0
+    is_ignored: false
+    lines: '    des_cipher = DES.new(b"12345678", DES.MODE_ECB)'
+    message: DES is insecure due to its small key size and is easily brute-forced.
+      Use AES-256.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 18
+    line: 21
+    offset: 530
+- check_id: detect-3des
+  end:
+    col: 69
+    line: 24
+    offset: 658
+  extra:
+    engine_kind: OSS
+    fingerprint: 02e45c82e4cc312f7cae1d0cf6f129abfe59a40148296674196bab420f2cdfd5a664e643615ee90fe613746db337e356f217db556229a3416f9620cb3a2e45fb_0
+    is_ignored: false
+    lines: '    triple_des_cipher = DES3.new(b"1234567812345678", DES3.MODE_ECB)'
+    message: 3DES is deprecated due to meet-in-the-middle attacks. Use AES-256.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 25
+    line: 24
+    offset: 614
+- check_id: detect-short-aes
+  end:
+    col: 65
+    line: 33
+    offset: 985
+  extra:
+    engine_kind: OSS
+    fingerprint: 3865ecf37848d7babe964595425018d8c9ce36fa8544017c802acbe88809baf796fa7eee6dc4e76c83ff94f6eb1a0ce5ae6e1496020b65b42ffce81543e5850f_0
+    is_ignored: false
+    lines: '    aes_short_key = AES.new(b"16bytekey16bytekey", key_size=128)'
+    message: AES-128 is vulnerable to quantum attacks. Use AES-256.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 21
+    line: 33
+    offset: 941
+- check_id: detect-small-rsa
+  end:
+    col: 33
+    line: 38
+    offset: 1110
+  extra:
+    engine_kind: OSS
+    fingerprint: 012c1e84085d4787632b87a7f2d801f5ad07d45f91f89aee2dfc6c009ea752336d815e4b5d094f079cb2595364618aa995b4acecb4fafe9a77e8662e86e2ec91_0
+    is_ignored: false
+    lines: '    rsa_key = RSA.generate(1024)'
+    message: RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 15
+    line: 38
+    offset: 1092
+- check_id: detect-dsa
+  end:
+    col: 33
+    line: 41
+    offset: 1167
+  extra:
+    engine_kind: OSS
+    fingerprint: 6ef58fbcbd1b930942bb2d352bdd1fb57d5df18cca7112227a569d8e17b9304957e2aba50c3c207c23ac3b1a40b5da2a396cff30e3601c3e670d3473275c2300_0
+    is_ignored: false
+    lines: '    dsa_key = DSA.generate(2048)'
+    message: DSA is vulnerable to parameter reuse risks and quantum attacks. Consider
+      ECDSA with strong curves.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 15
+    line: 41
+    offset: 1149
+- check_id: detect-rsa-no-oaep
+  end:
+    col: 62
+    line: 49
+    offset: 1404
+  extra:
+    engine_kind: OSS
+    fingerprint: aaea99b66429f108572556c46807e2f4b3539dde228d4634237f08bfd8292120da8e42ac0641eabe3538827f6364ff6dceaf8cc9a45f190e98d43293334f731f_0
+    is_ignored: false
+    lines: '    signature_md5 = PKCS1_v1_5.new(..., hashAlgo=hashlib.md5)'
+    message: RSA encryption without OAEP padding is insecure. Use OAEP padding.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 21
+    line: 49
+    offset: 1363
+- check_id: detect-rsa-no-oaep
+  end:
+    col: 64
+    line: 52
+    offset: 1510
+  extra:
+    engine_kind: OSS
+    fingerprint: aaea99b66429f108572556c46807e2f4b3539dde228d4634237f08bfd8292120da8e42ac0641eabe3538827f6364ff6dceaf8cc9a45f190e98d43293334f731f_1
+    is_ignored: false
+    lines: '    signature_sha1 = PKCS1_v1_5.new(..., hashAlgo=hashlib.sha1)'
+    message: RSA encryption without OAEP padding is insecure. Use OAEP padding.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 22
+    line: 52
+    offset: 1468
+- check_id: detect-insecure-rng
+  end:
+    col: 32
+    line: 57
+    offset: 1643
+  extra:
+    engine_kind: OSS
+    fingerprint: dcabae66f025186909af9beca8975f32119501aa019d7dfcaa28bf21bee8041d1e65687e85c0e49601cf7761bce973aae615366cfba8286923556519d9d23bdf_0
+    is_ignored: false
+    lines: '    rng_value = random.random()'
+    message: Non-cryptographically secure RNGs like random() are insecure for key
+      generation. Use secrets or os.urandom.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 17
+    line: 57
+    offset: 1628
+- check_id: detect-rc4
+  end:
+    col: 33
+    line: 62
+    offset: 1759
+  extra:
+    engine_kind: OSS
+    fingerprint: ffa295a76809f54fe4361a111c8668e572e2d85ef314ac3ae5deaa6c32bd3776e2eab7acee9dbdc212e27d2ea4b4296f200b1cf87c4b42143c694d380fb3061a_0
+    is_ignored: false
+    lines: '    rc4_cipher = RC4.new(b"key")'
+    message: RC4 is considered insecure due to vulnerabilities. Use AES-GCM or another
+      secure algorithm.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 18
+    line: 62
+    offset: 1744
+- check_id: detect-blowfish
+  end:
+    col: 43
+    line: 65
+    offset: 1831
+  extra:
+    engine_kind: OSS
+    fingerprint: 8175c249f1522cd8754f8844d41ba37e8b375e636c5cf7e8e98e281f59ca3f4291be4b005b095f13c4c76dbeec57a865a90d01dfddf85e2c5a1b77a251705674_0
+    is_ignored: false
+    lines: '    blowfish_cipher = Blowfish.new(b"key")'
+    message: Blowfish has known weaknesses and is not recommended. Use AES-GCM or
+      another secure algorithm.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 23
+    line: 65
+    offset: 1811
+- check_id: detect-idea
+  end:
+    col: 35
+    line: 68
+    offset: 1889
+  extra:
+    engine_kind: OSS
+    fingerprint: 0c7a5fffee122104677032023cb8073e027f2f6ac2e59fc07523f66e9f45383410fe3ba05d7973b9b367d784ddb29ca8995dc423e5cf562f586ca3ea98e36a85_0
+    is_ignored: false
+    lines: '    idea_cipher = IDEA.new(b"key")'
+    message: IDEA is outdated and not recommended for modern applications. Use AES-GCM
+      or another secure algorithm.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 19
+    line: 68
+    offset: 1873
+- check_id: detect-hardcoded-keys
+  end:
+    col: 26
+    line: 72
+    offset: 1969
+  extra:
+    engine_kind: OSS
+    fingerprint: 2c8d633ff3ec252d45783f470eeca4562778e8421c73705007d79ab79d56ff888f6c2c37731620d5b8750edecaeb32b55b872d1e6c5e86274338b1af570ea862_0
+    is_ignored: false
+    lines: '    key = "hardcoded-key"  # Hardcoded cryptographic key (insecure)'
+    message: Hard-coded cryptographic keys are insecure. Use secure key management
+      practices.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 5
+    line: 72
+    offset: 1948
+- check_id: detect-weak-ecc
+  end:
+    col: 47
+    line: 77
+    offset: 2150
+  extra:
+    engine_kind: OSS
+    fingerprint: bdebeeeea42c3e8c4950db1a3faf8f15ba929af6c88530302fdbc510b23160b7ffd706838823687cc73f916519ba11864ad3aff53e34294f8c37db9735b57daa_0
+    is_ignored: false
+    lines: '    weak_ecc = ECC.generate(curve=''secp192r1'')'
+    message: The curve secp192r1 is considered weak. Use stronger curves like secp256r1.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 16
+    line: 77
+    offset: 2119
+- check_id: detect-rsa-no-oaep
+  end:
+    col: 38
+    line: 82
+    offset: 2286
+  extra:
+    engine_kind: OSS
+    fingerprint: aaea99b66429f108572556c46807e2f4b3539dde228d4634237f08bfd8292120da8e42ac0641eabe3538827f6364ff6dceaf8cc9a45f190e98d43293334f731f_2
+    is_ignored: false
+    lines: '    rsa_no_oaep = PKCS1_v1_5.new(...)'
+    message: RSA encryption without OAEP padding is insecure. Use OAEP padding.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test.py
+  start:
+    col: 19
+    line: 82
+    offset: 2267
+- check_id: detect-hardcoded-secrets
+  end:
+    col: 35
+    line: 8
+    offset: 242
+  extra:
+    engine_kind: OSS
+    fingerprint: b5f096719f40334443ee3ca6743a04ab45efc7a1c2d2b6bb73432a063deb4ea40a4ced5db18b4bb624fe9822b7de738ebe662f4ef1ed7a1282ea7988423d6484_0
+    is_ignored: false
+    lines: secret_key = "my_super_secret_key"
+    message: Hardcoded cryptographic secrets are insecure. Use secure key management
+      practices.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test_pantelis.py
+  start:
+    col: 1
+    line: 8
+    offset: 208
+- check_id: detect-md5
+  end:
+    col: 42
+    line: 21
+    offset: 685
+  extra:
+    engine_kind: OSS
+    fingerprint: 0219814e243683c3edfa0b932597b8eb5fcc64e4cb7af6ca2ed851c7cbffc36a2a330af165966353bf17590fd36f1316fa31464176b3016c7cd3cc3f7ee23fe8_0
+    is_ignored: false
+    lines: '    return hashlib.md5(password.encode()).hexdigest()'
+    message: Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test_pantelis.py
+  start:
+    col: 12
+    line: 21
+    offset: 655
+- check_id: detect-sha2
+  end:
+    col: 45
+    line: 26
+    offset: 866
+  extra:
+    engine_kind: OSS
+    fingerprint: 9c74b3a92456d31ff9d96f6aafed5f4f33d8f6936a66b326253431ee71781c259fa723ce3da33ebc973fa3f5c13b8b0e9b3dee591e79a92e6b7af71ff8be5483_0
+    is_ignored: false
+    lines: '    return hashlib.sha256(password.encode()).hexdigest()'
+    message: SHA-256 has reduced security margin under Grover's algorithm. Consider
+      SHA-3 for longer-term security.
+    metadata: {}
+    metavars: {}
+    severity: WARNING
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test_pantelis.py
+  start:
+    col: 12
+    line: 26
+    offset: 833
+- check_id: detect-small-rsa-key-size
+  end:
+    col: 81
+    line: 37
+    offset: 1264
+  extra:
+    engine_kind: OSS
+    fingerprint: dd80ea82803f2f627d7b1b036a5b9388d70334bc5c5c4441ae03a20ae4adf6b91cd4004751681c7bb8d88d8257e643da518e7cd5afabb8e9c6e4dcfc04151450_0
+    is_ignored: false
+    lines: '    private_key = rsa.generate_private_key(public_exponent=65537, key_size=1024)'
+    message: RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test_pantelis.py
+  start:
+    col: 19
+    line: 37
+    offset: 1202
+- check_id: detect-insecure-rng
+  end:
+    col: 31
+    line: 50
+    offset: 1693
+  extra:
+    engine_kind: OSS
+    fingerprint: d4b47321edf8339cee1a5caf8a11ad28f125ce34515a5a479dd952a2ed07ece50f7bf68c670bd92d807e58e15b1d28bb68d7c13d25dc356a25cc19a415406ec2_0
+    is_ignored: false
+    lines: '    return str(random.random())'
+    message: Non-cryptographically secure RNGs like random() are insecure for key
+      generation. Use secrets or os.urandom.
+    metadata: {}
+    metavars: {}
+    severity: ERROR
+    validation_state: NO_VALIDATOR
+  path: ../Part2/test_pantelis.py
+  start:
+    col: 16
+    line: 50
+    offset: 1678
+skipped_rules: []
+version: 1.97.0

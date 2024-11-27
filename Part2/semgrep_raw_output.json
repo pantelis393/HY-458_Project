@@ -1,0 +1,213 @@
+{
+  "version": "1.97.0",
+  "results": [
+    {
+      "check_id": "detect-md5",
+      "path": "test.py",
+      "start": {
+        "line": 5,
+        "col": 1,
+        "offset": 74
+      },
+      "end": {
+        "line": 5,
+        "col": 21,
+        "offset": 94
+      },
+      "extra": {
+        "metavars": {},
+        "message": "Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.",
+        "metadata": {},
+        "severity": "ERROR",
+        "fingerprint": "5b981e1aff5fb28416a7fac8dfc53c6ed7cf0fead6cdbda5575d96cfa0790a459315b331e50bc1c5fa8f470e3da50cacaf50647b005679ba7d2610a006180e1a_0",
+        "lines": "hashlib.md5(b\"test\")  # MD5 (vulnerable)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-sha1",
+      "path": "test.py",
+      "start": {
+        "line": 6,
+        "col": 1,
+        "offset": 115
+      },
+      "end": {
+        "line": 6,
+        "col": 22,
+        "offset": 136
+      },
+      "extra": {
+        "metavars": {},
+        "message": "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "19eb24915677513452f4827684ed822985b71c8810ceed7f4da22254cdb3c4332c2790bbc4139a4368bb0a6cfb6ca56729b6434b9bfca7bfe6c3730fb4eb3996_0",
+        "lines": "hashlib.sha1(b\"test\")  # SHA-1 (vulnerable)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-sha2",
+      "path": "test.py",
+      "start": {
+        "line": 7,
+        "col": 1,
+        "offset": 159
+      },
+      "end": {
+        "line": 7,
+        "col": 24,
+        "offset": 182
+      },
+      "extra": {
+        "metavars": {},
+        "message": "SHA-256 has reduced security margin under Grover's algorithm. Consider SHA-3 for longer-term security.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "13858469a0bd807cbc9d9ab009eba4044c764a4d25dd66d9f852c0d01a0b03f46ad61199e3ecdc686b6a4162729058b7a76015314bb9f0de71798430710aceff_0",
+        "lines": "hashlib.sha256(b\"test\")  # SHA-256 (informational)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-des",
+      "path": "test.py",
+      "start": {
+        "line": 10,
+        "col": 10,
+        "offset": 243
+      },
+      "end": {
+        "line": 10,
+        "col": 44,
+        "offset": 277
+      },
+      "extra": {
+        "metavars": {},
+        "message": "DES is insecure due to its small key size and is easily brute-forced. Use AES-256.",
+        "metadata": {},
+        "severity": "ERROR",
+        "fingerprint": "ccbc2d5ad9ead5c9ad4366849a97f28a07f1183eb63fbfe24586994eb341e7c67c0de6e9cb06f44d4952a1295d7ab368fbf790e01a8f3e4889a5037f01c30eb3_0",
+        "lines": "cipher = DES.new(b\"12345678\", DES.MODE_ECB)  # DES (vulnerable)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-3des",
+      "path": "test.py",
+      "start": {
+        "line": 11,
+        "col": 10,
+        "offset": 307
+      },
+      "end": {
+        "line": 11,
+        "col": 54,
+        "offset": 351
+      },
+      "extra": {
+        "metavars": {},
+        "message": "3DES is deprecated due to meet-in-the-middle attacks. Use AES-256.",
+        "metadata": {},
+        "severity": "ERROR",
+        "fingerprint": "ee33c2baf9dd67a8c97e560ae541fc9fa92d6962eeaddf7d69a2d46929c85c30e1f52dbc574169cbe6a47f86caa7a4e068724f85fab6540ea29f4aaaf86ace33_0",
+        "lines": "cipher = DES3.new(b\"1234567812345678\", DES3.MODE_ECB)  # 3DES (vulnerable)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-small-rsa",
+      "path": "test.py",
+      "start": {
+        "line": 17,
+        "col": 11,
+        "offset": 608
+      },
+      "end": {
+        "line": 17,
+        "col": 29,
+        "offset": 626
+      },
+      "extra": {
+        "metavars": {},
+        "message": "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits.",
+        "metadata": {},
+        "severity": "ERROR",
+        "fingerprint": "6237a15ba3ce671359d1d2fc9f5c75a11f41a1300c51cbca52d7985dd41a2e5d19f85615e620e26e2519a8c45ca6b5fff72bfaa5d9a26b93ac647de4feb952e8_0",
+        "lines": "rsa_key = RSA.generate(1024)  # RSA (vulnerable)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-dsa",
+      "path": "test.py",
+      "start": {
+        "line": 18,
+        "col": 11,
+        "offset": 657
+      },
+      "end": {
+        "line": 18,
+        "col": 29,
+        "offset": 675
+      },
+      "extra": {
+        "metavars": {},
+        "message": "DSA is vulnerable to parameter reuse risks and quantum attacks. Consider ECDSA with strong curves.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "963b12b98aab602b2fe6f3384336a521f4c4f762a4c6347e0f6fb0bf6506c3598b7257244b0d540cff67e5ebcff4ec16c163e70c8e0c556b6e201f10bee3b952_0",
+        "lines": "dsa_key = DSA.generate(2048)  # DSA (warn)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    },
+    {
+      "check_id": "detect-insecure-rng",
+      "path": "test.py",
+      "start": {
+        "line": 22,
+        "col": 1,
+        "offset": 731
+      },
+      "end": {
+        "line": 22,
+        "col": 16,
+        "offset": 746
+      },
+      "extra": {
+        "metavars": {},
+        "message": "Non-cryptographically secure RNGs like random() are insecure for key generation. Use secrets or os.urandom.",
+        "metadata": {},
+        "severity": "ERROR",
+        "fingerprint": "4c6881e48e3060b0de6613481ae4b65dbfcb2439a8e9ec9c3d131186eb025ef31c45f09d4605ce9e4a3a824295dee0fcde001219288026bba1357b4fcebad635_0",
+        "lines": "random.random()  # Non-cryptographic RNG (vulnerable)",
+        "is_ignored": false,
+        "engine_kind": "OSS",
+        "validation_state": "NO_VALIDATOR"
+      }
+    }
+  ],
+  "errors": [],
+  "paths": {
+    "scanned": [
+      "test.py"
+    ]
+  },
+  "interfile_languages_used": [],
+  "skipped_rules": []
+}

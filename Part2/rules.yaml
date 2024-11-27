@@ -1,0 +1,250 @@
+rules:
+  # One-way hash functions
+  - id: detect-md5
+    patterns:
+      - pattern: |
+          hashlib.md5(...)
+    message: "Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-sha1
+    patterns:
+      - pattern: |
+          hashlib.sha1(...)
+    message: "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - python
+
+  # Symmetric key cryptography
+  - id: detect-des
+    patterns:
+      - pattern: Crypto.Cipher.DES.new(...)
+    message: "DES is insecure due to its small key size and is easily brute-forced. Use AES-256."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-3des
+    patterns:
+      - pattern: Crypto.Cipher.DES3.new(...)
+    message: "3DES is deprecated due to meet-in-the-middle attacks. Use AES-256."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-ecb
+    patterns:
+      - pattern: Crypto.Cipher.AES.new(..., mode=Crypto.Cipher.AES.MODE_ECB)
+    message: "ECB mode is insecure because it leaks data patterns. Use CBC or GCM modes."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-cbc-without-integrity
+    patterns:
+      - pattern: Crypto.Cipher.AES.new(..., mode=Crypto.Cipher.AES.MODE_CBC)
+    message: "CBC mode without proper padding or integrity checks is vulnerable to padding oracle attacks. Use GCM instead."
+    severity: WARNING
+    languages:
+      - python
+
+  - id: detect-short-aes
+    patterns:
+      - pattern: Crypto.Cipher.AES.new(..., key_size=128)
+    message: "AES-128 is vulnerable to quantum attacks. Use AES-256."
+    severity: WARNING
+    languages:
+      - python
+
+  - id: detect-static-iv
+    patterns:
+      - pattern: |
+          iv = b"1234567890123456"
+    message: "Static IVs in AES encryption are insecure. Use randomized IVs for each encryption operation."
+    severity: ERROR
+    languages:
+      - python
+
+  # Asymmetric key cryptography
+  - id: detect-small-rsa
+    patterns:
+      - pattern: RSA.generate(1024)
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-small-rsa-key-size
+    patterns:
+      - pattern: |
+          rsa.generate_private_key(public_exponent=..., key_size=1024)
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-dsa
+    patterns:
+      - pattern: Crypto.PublicKey.DSA.generate(...)
+    message: "DSA is vulnerable to parameter reuse risks and quantum attacks. Consider ECDSA with strong curves."
+    severity: WARNING
+    languages:
+      - python
+
+  - id: detect-static-dh
+    patterns:
+      - pattern: DHStaticKey(...)
+    message: "Static Diffie-Hellman without ephemeral keys lacks forward secrecy. Use ephemeral Diffie-Hellman."
+    severity: WARNING
+    languages:
+      - python
+
+  # Digital signatures
+  - id: detect-md5-signature
+    patterns:
+      - pattern: sign(..., hashlib.md5(...))
+    message: "Signatures using MD5 are insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-sha1-signature
+    patterns:
+      - pattern: sign(..., hashlib.sha1(...))
+    message: "Signatures using SHA-1 are insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - python
+
+  # Cryptographically secure pseudorandom number generators
+  - id: detect-insecure-rng
+    patterns:
+      - pattern: random.random(...)
+    message: "Non-cryptographically secure RNGs like random() are insecure for key generation. Use secrets or os.urandom."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-sha2
+    patterns:
+      - pattern: hashlib.sha256(...)
+    message: "SHA-256 has reduced security margin under Grover's algorithm. Consider SHA-3 for longer-term security."
+    severity: WARNING
+    languages:
+      - python
+
+  # Additional rules
+  - id: detect-rc4
+    patterns:
+      - pattern: RC4.new(...)
+    message: "RC4 is considered insecure due to vulnerabilities. Use AES-GCM or another secure algorithm."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-blowfish
+    patterns:
+      - pattern: Blowfish.new(...)
+    message: "Blowfish has known weaknesses and is not recommended. Use AES-GCM or another secure algorithm."
+    severity: WARNING
+    languages:
+      - python
+
+  - id: detect-idea
+    patterns:
+      - pattern: IDEA.new(...)
+    message: "IDEA is outdated and not recommended for modern applications. Use AES-GCM or another secure algorithm."
+    severity: WARNING
+    languages:
+      - python
+
+  - id: detect-hardcoded-keys
+    patterns:
+      - pattern: key = "..."
+    message: "Hard-coded cryptographic keys are insecure. Use secure key management practices."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-hardcoded-secrets
+    patterns:
+      - pattern: |
+          secret_key = "..."
+    message: "Hardcoded cryptographic secrets are insecure. Use secure key management practices."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-rsa-no-oaep
+    patterns:
+      - pattern: PKCS1_v1_5.new(...)
+    message: "RSA encryption without OAEP padding is insecure. Use OAEP padding."
+    severity: ERROR
+    languages:
+      - python
+
+  - id: detect-weak-ecc
+    patterns:
+      - pattern: ECC.generate(curve='secp192r1')
+    message: "The curve secp192r1 is considered weak. Use stronger curves like secp256r1."
+    severity: ERROR
+    languages:
+      - python
+  - id: insecure-cipher-algorithm-rc4
+    pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
+    message: |
+      Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
+      known vulnerabilities. Use AES instead.
+    metadata:
+      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L94
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A3: Sensitive Data Exposure'
+      bandit-code: B304
+      references:
+      - https://crypto.stackexchange.com/questions/853/google-is-using-rc4-but-isnt-rc4-considered-unsafe
+      - https://sweet32.info/
+      category: security
+      technology:
+      - cryptography
+    severity: WARNING
+    languages:
+    - python
+  - id: insecure-cipher-algorithm-blowfish
+    pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
+    message: |
+      Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
+      known vulnerabilities. Use AES instead.
+    metadata:
+      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L96
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A3: Sensitive Data Exposure'
+      bandit-code: B304
+      references:
+      - https://sweet32.info/
+      category: security
+      technology:
+      - cryptography
+    severity: WARNING
+    languages:
+    - python
+  - id: insecure-cipher-algorithm-idea
+    pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
+    message: |
+      Detected IDEA cipher algorithm which is considered insecure. The algorithm is
+      considered weak and has been deprecated. Use AES instead.
+    metadata:
+      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
+      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
+      owasp: 'A3: Sensitive Data Exposure'
+      bandit-code: B304
+      references:
+      - https://tools.ietf.org/html/rfc5469
+      category: security
+      technology:
+      - cryptography
+    severity: WARNING
+    languages:
+    - python
