@@ -68,14 +68,17 @@ rules:
     languages:
       - python
 
-  # Asymmetric key cryptography
+
   - id: detect-small-rsa
     patterns:
-      - pattern: RSA.generate(1024)
+      - pattern-inside: RSA.generate($X)
+      - pattern: RSA.generate($X)
+    pattern-where-python: "int(vars['X']) < 2048"
     message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
     severity: ERROR
     languages:
       - python
+
 
   - id: detect-small-rsa-key-size
     patterns:
