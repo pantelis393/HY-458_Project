@@ -1,20 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semgrep Results - Folders</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Semgrep Scans</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Root Folders</h1>
-    <div class="container">
-        {% for folder in root_folders %}
-        <form action="/results" method="get">
-            <input type="hidden" name="folder" value="{{ folder }}">
-            <button type="submit" class="folder-button rounded">{{ folder }}</button>
-        </form>
-        {% endfor %}
-    </div>
+  <h1>All Semgrep Scans</h1>
+  <div class="container rounded">
+    <p>We have <strong>{{ total_scans }}</strong> scans in our database.</p>
+
+    <table class="rounded">
+      <thead>
+        <tr>
+          <th>Scan Name</th>
+          <th>Scan Date</th>
+          <th>Vulnerabilities</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for scan in scans %}
+        <tr>
+          <td>{{ scan[0] }}</td>
+          <td>{{ scan[1] }}</td>
+          <td>{{ scan[2] }}</td>
+          <td>
+            <form action="/scan" method="get" style="display:inline;">
+              <input type="hidden" name="scan_name" value="{{ scan[0] }}">
+              <input type="hidden" name="scan_date" value="{{ scan[1] }}">
+              <button type="submit" class="folder-button rounded">View</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

@@ -6,6 +6,7 @@ import sqlite3
 import os
 import logging
 from collections import defaultdict
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -13,20 +14,22 @@ logging.basicConfig(level=logging.INFO)
 
 def create_database(db_file="semgrep_results.db", reset=False):
     """
-    Create the SQLite database and table if they don't exist.
-    Optionally, reset the database by deleting all existing entries.
-
-    Args:
-        db_file (str): Path to the SQLite database file.
-        reset (bool): If True, delete all existing entries in the table.
+    Create or recreate the SQLite database and table for Semgrep results.
+    If 'reset' is True, the existing table (if any) is dropped.
     """
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
 
-    # Create the table for Semgrep results
+    if reset:
+        cursor.execute("DROP TABLE IF EXISTS semgrep_results")
+        logging.info("Database reset: Table dropped.")
+
+    # Create the table for Semgrep results (with scan_name and scan_date)
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS semgrep_results (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            scan_name TEXT,
+            scan_date TEXT,
             file_path TEXT,
             line_start INTEGER,
             line_end INTEGER,
@@ -38,11 +41,6 @@ def create_database(db_file="semgrep_results.db", reset=False):
         )
     """)
 
-    # Reset the table if the flag is set
-    if reset:
-        cursor.execute("DELETE FROM semgrep_results")
-        logging.info("Database reset: All existing entries deleted.")
-
     # Create indexes for better query performance
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_file_path ON semgrep_results(file_path)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_severity ON semgrep_results(severity)")
@@ -51,13 +49,15 @@ def create_database(db_file="semgrep_results.db", reset=False):
     conn.close()
 
 
-def save_to_database(findings, db_file="semgrep_results.db"):
+def save_to_database(findings, db_file, scan_name, scan_date):
     """
-    Save Semgrep findings into the SQLite database.
+    Save Semgrep findings into the SQLite database with a given scan name and date.
 
     Args:
-        findings (list): List of Semgrep findings.
+        findings (list): List of Semgrep findings (dicts).
         db_file (str): Path to the SQLite database file.
+        scan_name (str): User-specified name for this scan.
+        scan_date (str): Timestamp for when this scan occurred.
     """
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
@@ -65,10 +65,20 @@ def save_to_database(findings, db_file="semgrep_results.db"):
     for finding in findings:
         cursor.execute("""
             INSERT INTO semgrep_results (
-                file_path, line_start, line_end, column_start, column_end, 
-                check_id, message, severity
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                scan_name,
+                scan_date,
+                file_path,
+                line_start,
+                line_end,
+                column_start,
+                column_end,
+                check_id,
+                message,
+                severity
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
+            scan_name,
+            scan_date,
             finding.get("path"),
             finding.get("start", {}).get("line"),
             finding.get("end", {}).get("line"),
@@ -109,6 +119,7 @@ def gather_all_files(target_path):
 
     return all_files
 
+
 def run_semgrep(rule_file: str, target: str) -> list:
     """
     Run Semgrep on a target file/directory with a specific rule file.
@@ -118,7 +129,7 @@ def run_semgrep(rule_file: str, target: str) -> list:
         exit(1)
 
     try:
-        # Remove '--recursive' and just rely on Semgrep scanning subdirectories by default
+        # Run Semgrep and capture JSON output
         result = subprocess.run(
             ["semgrep", "--config", rule_file, target, "--json"],
             capture_output=True,
@@ -128,7 +139,7 @@ def run_semgrep(rule_file: str, target: str) -> list:
 
         findings = json.loads(result.stdout)
 
-        # Save the raw Semgrep output as a YAML
+        # Save the raw Semgrep output as a YAML file for reference
         with open("semgrep_results.yaml", "w") as f:
             yaml.dump(findings, f, default_flow_style=False)
 
@@ -146,28 +157,24 @@ def display_findings(findings: list, all_scanned_files: list):
         findings (list): List of Semgrep findings.
         all_scanned_files (list): The full list of files that were scanned.
     """
-    # Convert to set for faster membership checks
     all_scanned_files = set(all_scanned_files)
-
     file_stats = defaultdict(lambda: {"total": 0, "vulnerable": 0})
     vulnerable_files = set()
 
-    # Populate total files scanned per language
+    # Populate total files scanned per "language" (basic guess by extension)
     for file_path in all_scanned_files:
         language = get_language_from_extension(file_path)
         file_stats[language]["total"] += 1
 
-    # First, display all findings
+    # Print each finding
     for finding in findings:
         file_path = finding.get('path', 'Unknown file')
         line = finding.get('start', {}).get('line', 'Unknown line')
         message = finding.get('extra', {}).get('message', 'No specific message found.')
         logging.info(f"- File: {file_path}, Line: {line}\n  Message: {message}")
-
-        # Add to vulnerable set if not already there
         vulnerable_files.add(file_path)
 
-    # Now count vulnerable files per language (only once per file)
+    # Count vulnerable files per language
     for file_path in vulnerable_files:
         language = get_language_from_extension(file_path)
         file_stats[language]["vulnerable"] += 1
@@ -187,8 +194,9 @@ def display_findings(findings: list, all_scanned_files: list):
     for lang, files in categorized_files.items():
         logging.info(f"{lang} Files:")
         for file_path in files:
-            vulnerable_marker = " (vulnerable)" if file_path in vulnerable_files else ""
-            logging.info(f"  - {file_path}{vulnerable_marker}")
+            marker = " (vulnerable)" if file_path in vulnerable_files else ""
+            logging.info(f"  - {file_path}{marker}")
+
 
 def get_language_from_extension(file_path):
     """
@@ -198,7 +206,7 @@ def get_language_from_extension(file_path):
         file_path (str): Path to the file.
 
     Returns:
-        str: The programming language (e.g., Python, Java, C).
+        str: The guessed programming language.
     """
     ext = os.path.splitext(file_path)[1].lower()
     if ext == '.py':
@@ -212,7 +220,7 @@ def get_language_from_extension(file_path):
 
 
 if __name__ == "__main__":
-    # Define default rule file and target file/directory
+    # Define default rule file and target
     default_rule_file = "rules.yaml"
     default_target = "Vulnerable_Code"
 
@@ -221,7 +229,7 @@ if __name__ == "__main__":
     parser.add_argument('--rules', help='Path to the Semgrep rule file (YAML).')
     parser.add_argument('--target', help='Path to the target file or directory to scan.')
     parser.add_argument('--db', help='Path to the SQLite database file.', default="semgrep_results.db")
-    parser.add_argument('--reset-db', help='Reset the database by deleting all existing entries.', action='store_true')
+    parser.add_argument('--reset-db', help='Reset the database by dropping and recreating the table.', action='store_true')
 
     args = parser.parse_args()
 
@@ -230,18 +238,26 @@ if __name__ == "__main__":
     db_file = args.db
     reset_db = args.reset_db
 
-    # Create the database and optionally reset it
+    # Create/reset the database if needed
     create_database(db_file, reset=reset_db)
 
-    # Gather all files in target (so we know exactly which files we scanned)
+    # Prompt the user for a scan name
+    scan_name = input("Enter a name for this scan: ").strip()
+    if not scan_name:
+        scan_name = "Unnamed_Scan"
+
+    # Generate a timestamp for this scan
+    scan_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Gather all files in the target
     all_files = gather_all_files(target)
 
     # Run Semgrep
     findings = run_semgrep(rule_file, target)
 
-    # Display results with correct stats
+    # Display results in the console
     display_findings(findings, all_files)
 
-    # Save findings to the database
-    save_to_database(findings, db_file)
-    logging.info(f"Results saved to database: {db_file}")
+    # Save findings to the database with the given name/date
+    save_to_database(findings, db_file, scan_name, scan_date)
+    logging.info(f"Results saved to database: {db_file} (scan: '{scan_name}', date: {scan_date})")

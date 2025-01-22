@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Files in {{ folder }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Semgrep Results - Files</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Files in {{ folder }}</h1>
-    <div class="container">
-        {% for file in files %}
-        <form action="/details" method="get">
-            <input type="hidden" name="file_path" value="{{ file }}">
-            <button type="submit" class="file-button">{{ file }}</button>
-        </form>
-        {% endfor %}
-    </div>
+  <h1>Files in Folder: {{ folder }}</h1>
+  <div class="container rounded">
+    {% for f in files %}
+      <form action="/details" method="get">
+        <input type="hidden" name="file_path" value="{{ f }}">
+        <input type="hidden" name="scan_name" value="{{ scan_name }}">
+        <input type="hidden" name="scan_date" value="{{ scan_date }}">
+        <button type="submit" class="folder-button rounded">
+          {{ f }}
+        </button>
+      </form>
+    {% endfor %}
+    <br>
+    <a href="{{ url_for('scan', scan_name=scan_name, scan_date=scan_date) }}"
+       class="file-button rounded">Back to Folders</a>
+  </div>
 </body>
 </html>

@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results for {{ file_path }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Results for {{ file_path }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Results for {{ file_path }}</h1>
-    <div class="container rounded">
-        <table class="rounded">
-            <thead>
-                <tr>
-                    <th>File Path</th>
-                    <th>Line</th>
-                    <th>Message</th>
-                    <th>Severity</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for result in results %}
-                <tr>
-                    <td>{{ result[0] }}</td>
-                    <td>{{ result[1] }}</td>
-                    <td>{{ result[2] }}</td>
-                    <td>
-                        <span class="severity-badge severity-{{ result[3]|lower }}">
-                            {{ result[3] }}
-                        </span>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <a href="/" class="file-button rounded">Back to Folders</a>
-    </div>
+  <h1>Results for {{ file_path }}</h1>
+  <div class="container rounded">
+    <table class="rounded">
+      <thead>
+        <tr>
+          <th>File Path</th>
+          <th>Line</th>
+          <th>Message</th>
+          <th>Severity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in results %}
+          <tr>
+            <td>{{ result[0] }}</td>
+            <td>{{ result[1] }}</td>
+            <td>{{ result[2] }}</td>
+            <td>
+              <span class="severity-badge severity-{{ result[3]|lower }}">
+                {{ result[3] }}
+              </span>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+    <a href="{{ url_for('results', scan_name=scan_name, scan_date=scan_date, folder=file_path.split('/')[0]) }}"
+       class="file-button rounded">
+       Back to Files
+    </a>
+  </div>
 </body>
 </html>
