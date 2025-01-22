@@ -1,0 +1,98 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    padding: 20px;
+    margin: 0 0 20px 0;
+    border-radius: 15px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: rgba(237, 219, 219, 0.11); /* Light gray shade background */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+}
+
+th {
+    background: #6a11cb;
+    color: white;
+    border: none;
+}
+
+td {
+    font-size: 14px;
+    text-align: center;
+    border: none;
+}
+
+.file-button, .folder-button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #2575fc;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.file-button:hover, .folder-button:hover {
+    background: #6a11cb;
+    transform: scale(1.05);
+}
+
+/* Rounded Corner Class */
+.rounded {
+    border-radius: 15px;
+}
+
+/* Badge Styles */
+.severity-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+/* Severity Colors */
+.severity-low {
+    background-color: #f0ad4e; /* Yellow-orange */
+}
+
+.severity-medium {
+    background-color: #f39c12; /* Orange */
+}
+
+.severity-high {
+    background-color: #d9534f; /* Red */
+}

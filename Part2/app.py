@@ -30,7 +30,13 @@ def get_files_in_folder(folder):
 def get_results_by_file(file_path):
     """
     Get Semgrep results for a specific file path from the database.
+    Map severities to 'Low', 'Medium', and 'High' for user-friendly display.
     """
+    severity_mapping = {
+        "info": "Low",
+        "warning": "Medium",
+        "error": "High"
+    }
     conn = sqlite3.connect("semgrep_results.db")
     cursor = conn.cursor()
     cursor.execute("""
@@ -41,6 +47,8 @@ def get_results_by_file(file_path):
     """, (file_path,))
     results = cursor.fetchall()
     conn.close()
+    # Apply severity mapping
+    results = [(row[0], row[1], row[2], severity_mapping.get(row[3].lower(), row[3])) for row in results]
     return results
 
 @app.route("/")
