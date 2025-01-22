@@ -132,7 +132,7 @@ rules:
     patterns:
       - pattern: hashlib.sha256(...)
     message: "SHA-256 has reduced security margin under Grover's algorithm. Consider SHA-3 for longer-term security."
-    severity: WARNING
+    severity: INFO
     languages:
       - python
 
@@ -157,7 +157,7 @@ rules:
     patterns:
       - pattern: IDEA.new(...)
     message: "IDEA is outdated and not recommended for modern applications. Use AES-GCM or another secure algorithm."
-    severity: WARNING
+    severity: INFO
     languages:
       - python
 
@@ -193,58 +193,142 @@ rules:
     severity: ERROR
     languages:
       - python
+
   - id: insecure-cipher-algorithm-rc4
     pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4(...)
     message: |
       Detected RC4 cipher algorithm which is considered insecure. The algorithm has many
       known vulnerabilities. Use AES instead.
-    metadata:
-      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L94
-      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-      owasp: 'A3: Sensitive Data Exposure'
-      bandit-code: B304
-      references:
-      - https://crypto.stackexchange.com/questions/853/google-is-using-rc4-but-isnt-rc4-considered-unsafe
-      - https://sweet32.info/
-      category: security
-      technology:
-      - cryptography
-    severity: WARNING
+    severity: ERROR
     languages:
-    - python
+      - python
+
   - id: insecure-cipher-algorithm-blowfish
     pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish(...)
     message: |
       Detected Blowfish cipher algorithm which is considered insecure. The algorithm has many
       known vulnerabilities. Use AES instead.
-    metadata:
-      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L96
-      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-      owasp: 'A3: Sensitive Data Exposure'
-      bandit-code: B304
-      references:
-      - https://sweet32.info/
-      category: security
-      technology:
-      - cryptography
     severity: WARNING
     languages:
-    - python
+      - python
+
   - id: insecure-cipher-algorithm-idea
     pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA(...)
     message: |
       Detected IDEA cipher algorithm which is considered insecure. The algorithm is
       considered weak and has been deprecated. Use AES instead.
-    metadata:
-      source-rule-url: https://github.com/PyCQA/bandit/blob/d5f8fa0d89d7b11442fc6ec80ca42953974354c8/bandit/blacklists/calls.py#L98
-      cwe: 'CWE-327: Use of a Broken or Risky Cryptographic Algorithm'
-      owasp: 'A3: Sensitive Data Exposure'
-      bandit-code: B304
-      references:
-      - https://tools.ietf.org/html/rfc5469
-      category: security
-      technology:
-      - cryptography
+    severity: INFO
+    languages:
+      - python
+
+  # Java Rules
+  - id: detect-md5-java
+    patterns:
+      - pattern: |
+          MessageDigest.getInstance("MD5")
+    message: "MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - java
+
+  - id: detect-sha1-java
+    patterns:
+      - pattern: |
+          MessageDigest.getInstance("SHA-1")
+    message: "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3."
     severity: WARNING
     languages:
-    - python
+      - java
+
+  - id: detect-des-java
+    patterns:
+      - pattern: |
+          Cipher.getInstance("DES/ECB/PKCS5Padding")
+    message: "DES is insecure due to its small key size and vulnerability to brute-force attacks. Use AES-256 instead."
+    severity: ERROR
+    languages:
+      - java
+
+  - id: detect-static-key-java
+    patterns:
+      - pattern: |
+          new SecretKeySpec(...)
+    message: "Hardcoded cryptographic keys are insecure. Use a secure key management system."
+    severity: ERROR
+    languages:
+      - java
+
+  - id: detect-weak-rsa-java
+    patterns:
+      - pattern: |
+          KeyPairGenerator.getInstance("RSA").initialize($X);
+    pattern-where-python: "int(vars['X']) < 2048"
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - java
+
+  - id: detect-rsa-no-padding-java
+    pattern: |
+      Cipher.getInstance("RSA/ECB/NoPadding");
+    message: "No padding detected"
+    severity: ERROR
+    languages:
+      - java
+
+  # C Rules
+  - id: detect-md5-c
+    patterns:
+      - pattern: |
+          MD5(...)
+    message: "MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - c
+
+  - id: detect-sha1-c
+    patterns:
+      - pattern: |
+          SHA1(...)
+    message: "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - c
+
+  - id: detect-des-c
+    patterns:
+      - pattern: |
+          DES_set_key(...)
+    message: "DES is insecure due to its small key size and vulnerability to brute-force attacks. Use AES-256 instead."
+    severity: ERROR
+    languages:
+      - c
+
+  - id: detect-static-key-c
+    pattern: |
+      const unsigned char key[$SIZE] = $VALUE;
+    message: "Hardcoded cryptographic keys are insecure. Use a secure key management system."
+    severity: ERROR
+    languages:
+      - c
+
+
+  - id: detect-weak-rsa-c
+    patterns:
+      - pattern: |
+          RSA_generate_key($X, ...)
+    pattern-where-python: "int(vars['X']) < 2048"
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - c
+
+
+  - id: detect-weak-aes-c
+    patterns:
+      - pattern: AES_set_encrypt_key(key, $X, &aes_key)
+    pattern-where-python: "int(vars['X']) < 256"
+    message: "AES keys smaller than 256 bits are insecure. Use at least 256 bits."
+    severity: ERROR
+    languages:
+      - c
