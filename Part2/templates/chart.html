@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Cases Summary / Charts{% endblock %}
+
+{% block head_extras %}
+<!-- Chart.js - either local or via CDN -->
+<script src="{{ url_for('static', filename='chart.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Cases Summary (Chart)</h2>
+
+<canvas id="casesChart" width="600" height="400"></canvas>
+
+<script>
+  // data is a list of objects like:
+  // [ { scan_name: "Case1", total: 10, info: 5, warning: 3, error: 2 }, {...} ]
+  const rawData = {{ data|tojson }};
+
+  const labels = rawData.map(item => item.scan_name);
+  const infoData = rawData.map(item => item.info);
+  const warningData = rawData.map(item => item.warning);
+  const errorData = rawData.map(item => item.error);
+
+  const ctx = document.getElementById('casesChart').getContext('2d');
+  const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Info',
+          data: infoData,
+          backgroundColor: '#f0ad4e'
+        },
+        {
+          label: 'Warning',
+          data: warningData,
+          backgroundColor: '#f39c12'
+        },
+        {
+          label: 'Error',
+          data: errorData,
+          backgroundColor: '#d9534f'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+{% endblock %}

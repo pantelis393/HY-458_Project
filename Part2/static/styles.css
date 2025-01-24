@@ -22,6 +22,10 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+h2 {
+    margin-top: 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -49,9 +53,9 @@ td {
 }
 
 .file-button, .folder-button {
-    display: block;
-    margin: 10px auto;
-    padding: 10px 20px;
+    display: inline-block;
+    margin: 5px;
+    padding: 8px 15px;
     font-size: 16px;
     background: #2575fc;
     color: #fff;
@@ -95,4 +99,27 @@ td {
 
 .severity-high {
     background-color: #d9534f; /* Red */
+}
+
+/* Nav bar / actions container */
+.nav-bar {
+    margin-bottom: 15px;
+}
+
+/* Flash messages */
+.flash-container {
+    margin: 10px 0;
+}
+.flash {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
 }
