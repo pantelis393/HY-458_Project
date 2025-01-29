@@ -1,0 +1,409 @@
+rules:
+  # ---------------------------------------------------------------------
+  # Python Rules
+  # ---------------------------------------------------------------------
+
+  - id: detect-md5
+    patterns:
+      - pattern: hashlib.md5($DATA)
+    message: "Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      hashlib.sha256($DATA)
+
+  - id: detect-sha1
+    patterns:
+      - pattern: hashlib.sha1($DATA)
+    message: "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      hashlib.sha256($DATA)
+
+  - id: detect-des
+    patterns:
+      - pattern: Crypto.Cipher.DES.new($ARGS)
+    message: "DES is insecure due to its small key size and is easily brute-forced. Use AES-256."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      # Replace DES with AES (256-bit). For example, in CBC mode:
+      Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+
+  - id: detect-3des
+    patterns:
+      - pattern: Crypto.Cipher.DES3.new($ARGS)
+    message: "3DES is deprecated due to meet-in-the-middle attacks. Use AES-256."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+
+  - id: detect-ecb
+    patterns:
+      - pattern: Crypto.Cipher.AES.new($KEY, mode=Crypto.Cipher.AES.MODE_ECB)
+    message: "ECB mode is insecure because it leaks data patterns. Use CBC or GCM modes."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      Crypto.Cipher.AES.new($KEY, Crypto.Cipher.AES.MODE_GCM)
+
+  - id: detect-cbc-without-integrity
+    patterns:
+      - pattern: Crypto.Cipher.AES.new($KEY, mode=Crypto.Cipher.AES.MODE_CBC)
+    message: "CBC mode without proper padding or integrity checks is vulnerable to padding oracle attacks. Use GCM instead."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      Crypto.Cipher.AES.new($KEY, Crypto.Cipher.AES.MODE_GCM)
+
+  - id: detect-short-aes
+    patterns:
+      - pattern: Crypto.Cipher.AES.new($KEY, key_size=128)
+    message: "AES-128 is potentially weaker under quantum threats. Use AES-256."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      Crypto.Cipher.AES.new($KEY, key_size=256)
+
+  - id: detect-static-iv
+    patterns:
+      - pattern: iv = b"1234567890123456"
+    message: "Static IVs in AES encryption are insecure. Use randomized IVs for each encryption operation."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      from Crypto.Random import get_random_bytes
+      iv = get_random_bytes(16)
+
+  - id: detect-small-rsa
+    patterns:
+      - pattern: RSA.generate($BITS)
+      - pattern-inside: RSA.generate($BITS)
+    pattern-where-python: "int(vars['BITS']) < 2048"
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      RSA.generate(2048)
+
+  - id: detect-small-rsa-key-size
+    patterns:
+      - pattern: rsa.generate_private_key(public_exponent=$EXP, key_size=1024)
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      rsa.generate_private_key(public_exponent=$EXP, key_size=2048)
+
+  - id: detect-dsa
+    patterns:
+      - pattern: Crypto.PublicKey.DSA.generate($ARGS)
+    message: "DSA is vulnerable to parameter reuse risks and quantum attacks. Consider ECDSA with strong curves."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      # ECDSA example with secp256r1:
+      from Crypto.PublicKey import ECC
+      ECC.generate(curve='P-256')
+
+  - id: detect-static-dh
+    patterns:
+      - pattern: DHStaticKey($ARGS)
+    message: "Static Diffie-Hellman without ephemeral keys lacks forward secrecy. Use ephemeral Diffie-Hellman."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      # Use ephemeral Diffie-Hellman example:
+      # (This fix snippet is a placeholder: ephemeral DH typically requires a new ephemeral key each session.)
+      DHEphemeralKey($ARGS)
+
+  - id: detect-md5-signature
+    patterns:
+      - pattern: sign($DATA, hashlib.md5($MSG))
+    message: "Signatures using MD5 are insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      sign($DATA, hashlib.sha256($MSG))
+
+  - id: detect-sha1-signature
+    patterns:
+      - pattern: sign($DATA, hashlib.sha1($MSG))
+    message: "Signatures using SHA-1 are insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      sign($DATA, hashlib.sha256($MSG))
+
+  - id: detect-insecure-rng
+    patterns:
+      - pattern: random.random($ARGS)
+    message: "Non-cryptographically secure RNGs like random() are insecure for key generation. Use secrets or os.urandom."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      import secrets
+      secrets.token_bytes(32)
+
+  - id: detect-sha2
+    patterns:
+      - pattern: hashlib.sha256($DATA)
+    message: "SHA-256 has a reduced security margin under Grover's algorithm. Consider SHA-3 for longer-term security."
+    severity: INFO
+    languages:
+      - python
+    fix: |
+      hashlib.sha3_256($DATA)
+
+  - id: detect-rc4
+    patterns:
+      - pattern: RC4.new($ARGS)
+    message: "RC4 is considered insecure. Use AES-GCM or another modern cipher."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      from Crypto.Cipher import AES
+      AES.new($ARGS, AES.MODE_GCM)
+
+  - id: detect-blowfish
+    patterns:
+      - pattern: Blowfish.new($ARGS)
+    message: "Blowfish has known weaknesses. Use AES-GCM or another secure algorithm."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      from Crypto.Cipher import AES
+      AES.new($ARGS, AES.MODE_GCM)
+
+  - id: detect-idea
+    patterns:
+      - pattern: IDEA.new($ARGS)
+    message: "IDEA is outdated. Use AES-GCM or another secure algorithm."
+    severity: INFO
+    languages:
+      - python
+    fix: |
+      from Crypto.Cipher import AES
+      AES.new($ARGS, AES.MODE_GCM)
+
+  - id: detect-hardcoded-keys
+    patterns:
+      - pattern: key = "..."
+    message: "Hard-coded cryptographic keys are insecure. Use secure key management practices."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      # Remove or load from a secure key management system.
+      key = load_key_from_vault()
+
+  - id: detect-hardcoded-secrets
+    patterns:
+      - pattern: secret_key = "..."
+    message: "Hardcoded cryptographic secrets are insecure. Use secure key management practices."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      secret_key = load_secret_from_vault()
+
+  - id: detect-rsa-no-oaep
+    patterns:
+      - pattern: PKCS1_v1_5.new($RSA_KEY)
+    message: "RSA encryption without OAEP padding is insecure. Use OAEP padding."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      from Crypto.Cipher import PKCS1_OAEP
+      PKCS1_OAEP.new($RSA_KEY)
+
+  - id: detect-weak-ecc
+    patterns:
+      - pattern: ECC.generate(curve='secp192r1')
+    message: "The curve secp192r1 is considered weak. Use stronger curves like secp256r1."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      ECC.generate(curve='secp256r1')
+
+  # The cryptography library patterns:
+  - id: insecure-cipher-algorithm-rc4
+    pattern: cryptography.hazmat.primitives.ciphers.algorithms.ARC4($ARGS)
+    message: "Detected RC4 cipher algorithm which is considered insecure. Use AES instead."
+    severity: ERROR
+    languages:
+      - python
+    fix: |
+      cryptography.hazmat.primitives.ciphers.algorithms.AES($ARGS)
+
+  - id: insecure-cipher-algorithm-blowfish
+    pattern: cryptography.hazmat.primitives.ciphers.algorithms.Blowfish($ARGS)
+    message: "Detected Blowfish cipher algorithm which is considered insecure. Use AES instead."
+    severity: WARNING
+    languages:
+      - python
+    fix: |
+      cryptography.hazmat.primitives.ciphers.algorithms.AES($ARGS)
+
+  - id: insecure-cipher-algorithm-idea
+    pattern: cryptography.hazmat.primitives.ciphers.algorithms.IDEA($ARGS)
+    message: "Detected IDEA cipher algorithm which is considered insecure. Use AES instead."
+    severity: INFO
+    languages:
+      - python
+    fix: |
+      cryptography.hazmat.primitives.ciphers.algorithms.AES($ARGS)
+
+  # ---------------------------------------------------------------------
+  # Java Rules
+  # ---------------------------------------------------------------------
+
+  - id: detect-md5-java
+    patterns:
+      - pattern: MessageDigest.getInstance("MD5")
+    message: "MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - java
+    fix: |
+      MessageDigest.getInstance("SHA-256")
+
+  - id: detect-sha1-java
+    patterns:
+      - pattern: MessageDigest.getInstance("SHA-1")
+    message: "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - java
+    fix: |
+      MessageDigest.getInstance("SHA-256")
+
+  - id: detect-des-java
+    patterns:
+      - pattern: Cipher.getInstance("DES/ECB/PKCS5Padding")
+    message: "DES is insecure. Use AES-256 instead."
+    severity: ERROR
+    languages:
+      - java
+    fix: |
+      Cipher.getInstance("AES/GCM/NoPadding")
+
+  - id: detect-static-key-java
+    patterns:
+      - pattern: new SecretKeySpec(...)
+    message: "Hardcoded cryptographic keys are insecure. Use a secure key management system."
+    severity: ERROR
+    languages:
+      - java
+    fix: |
+      // Use a secure key management system or KMS retrieval
+      Key myKey = loadKeyFromKMS(...);
+
+  - id: detect-weak-rsa-java
+    patterns:
+      - pattern: KeyPairGenerator.getInstance("RSA").initialize($X);
+    pattern-where-python: "int(vars['X']) < 2048"
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - java
+    fix: |
+      KeyPairGenerator.getInstance("RSA").initialize(2048);
+
+  - id: detect-rsa-no-padding-java
+    pattern: Cipher.getInstance("RSA/ECB/NoPadding");
+    message: "No padding detected"
+    severity: ERROR
+    languages:
+      - java
+    fix: |
+      Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+
+  # ---------------------------------------------------------------------
+  # C Rules
+  # ---------------------------------------------------------------------
+
+  - id: detect-md5-c
+    patterns:
+      - pattern: MD5(...)
+    message: "MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3."
+    severity: ERROR
+    languages:
+      - c
+    fix: |
+      // Replace with a call to SHA-256, e.g., SHA256(...)
+      SHA256(...)
+
+  - id: detect-sha1-c
+    patterns:
+      - pattern: SHA1(...)
+    message: "SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3."
+    severity: WARNING
+    languages:
+      - c
+    fix: |
+      SHA256(...)
+
+  - id: detect-des-c
+    patterns:
+      - pattern: DES_set_key(...)
+    message: "DES is insecure. Use AES-256 instead."
+    severity: ERROR
+    languages:
+      - c
+    fix: |
+      // Replace with AES key setup call, e.g.:
+      AES_set_encrypt_key(..., 256, &aes_key);
+
+  - id: detect-static-key-c
+    pattern: const unsigned char key[$SIZE] = $VALUE;
+    message: "Hardcoded cryptographic keys are insecure. Use a secure key management system."
+    severity: ERROR
+    languages:
+      - c
+    fix: |
+      // Remove or load from a secure key management system
+      unsigned char *key = retrieve_key_from_secure_storage();
+
+  - id: detect-weak-rsa-c
+    patterns:
+      - pattern: RSA_generate_key($X, ...)
+    pattern-where-python: "int(vars['X']) < 2048"
+    message: "RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits."
+    severity: ERROR
+    languages:
+      - c
+    fix: |
+      RSA_generate_key(2048, ...)
+
+  - id: detect-weak-aes-c
+    patterns:
+      - pattern: AES_set_encrypt_key(key, $X, &aes_key)
+    pattern-where-python: "int(vars['X']) < 256"
+    message: "AES keys smaller than 256 bits are insecure. Use at least 256 bits."
+    severity: ERROR
+    languages:
+      - c
+    fix: |
+      AES_set_encrypt_key(key, 256, &aes_key)

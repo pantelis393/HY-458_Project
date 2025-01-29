@@ -9,17 +9,6 @@ public class TripleDES {
         byte[] keyBytes = "123456781234567812345678".getBytes();
 // Use a secure key management system or KMS retrieval
 Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
 
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key);

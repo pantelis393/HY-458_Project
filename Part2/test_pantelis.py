@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 
 # 1. Hardcoded Secrets
 # Vulnerability: Hardcoding cryptographic keys in the source code.
-secret_key = "my_super_secret_key"
+secret_key = load_secret_from_vault()
 
 def encrypt_data(data):
     cipher = AES.new(secret_key.encode(), AES.MODE_CBC, iv=b'1234567890123456')
@@ -18,12 +18,12 @@ def pad_data(data):
 # 2. Use of Weak Cryptographic Algorithms
 # Vulnerability: Using MD5, which is considered cryptographically weak.
 def hash_password_md5(password):
-    return hashlib.md5(password.encode()).hexdigest()
+hashlib.sha3_256($DATA)
 
 # 3. Missing Salt in Hashing
 # Vulnerability: Not using a salt when hashing passwords.
 def hash_password_sha256(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+hashlib.sha3_256($DATA)
 
 # 4. Use of ECB Mode
 # Vulnerability: Using ECB mode for AES encryption.
@@ -34,7 +34,7 @@ def encrypt_ecb_mode(data, key):
 # 5. Inadequate Key Size
 # Vulnerability: Using RSA keys of insufficient length.
 def generate_rsa_keys():
-    private_key = rsa.generate_private_key(public_exponent=65537, key_size=1024)
+rsa.generate_private_key(public_exponent=$EXP, key_size=2048)
     return private_key
 
 # 6. Predictable Initialization Vectors (IVs)
@@ -47,4 +47,14 @@ def encrypt_with_static_iv(data, key):
 # 7. Insecure Random Number Generation
 # Vulnerability: Using random.random() for cryptographic purposes.
 def generate_token():
-    return str(random.random())
+import secrets
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+secrets.token_bytes(32)

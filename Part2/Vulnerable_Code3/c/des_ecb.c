@@ -17,7 +17,6 @@ AES_set_encrypt_key(..., 256, &aes_key);
 AES_set_encrypt_key(..., 256, &aes_key);
 AES_set_encrypt_key(..., 256, &aes_key);
 AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
 
     const char *plaintext = "This is a secret!";
     char ciphertext[64] = {0};

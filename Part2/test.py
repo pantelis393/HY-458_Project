@@ -7,75 +7,195 @@ import random
 # One-way hash functions
 def hash_example():
     # MD5 (insecure)
-    hashed_md5 = hashlib.md5(b"example").hexdigest()
+hashlib.sha3_256($DATA)
 
     # SHA-1 (insecure)
-    hashed_sha1 = hashlib.sha1(b"example").hexdigest()
+hashlib.sha3_256($DATA)
 
     # SHA-256 (informational)
-    hashed_sha256 = hashlib.sha256(b"example").hexdigest()
+hashlib.sha3_256($DATA)
 
 # Symmetric key cryptography
 def symmetric_encryption():
     # DES (insecure)
-    des_cipher = DES.new(b"12345678", DES.MODE_ECB)
+# Replace DES with AES (256-bit). For example, in CBC mode:
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+Crypto.Cipher.AES.new($KEY, key_size=256)
+Crypto.Cipher.AES.new($KEY, key_size=256)
+Crypto.Cipher.AES.new($KEY, key_size=256)
+Crypto.Cipher.AES.new($KEY, key_size=256)
+Crypto.Cipher.AES.new($KEY, key_size=256)
+RSA.generate(2048)
+RSA.generate(2048)
+RSA.generate(2048)
+# ECDSA example with secp256r1:
+from Crypto.PublicKey import ECC
+ECC.generate(curve='P-256')
+# ECDSA example with secp256r1:
+from Crypto.PublicKey import ECC
+ECC.generate(curve='P-256')
+# ECDSA example with secp256r1:
+from Crypto.PublicKey import ECC
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+# ECDSA example with secp256r1:
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+# ECDSA example with secp256r1:
+import secrets
+secrets.token_bytes(32)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+# Remove or load from a secure key management system.
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
 
-    # 3DES (deprecated)
-    triple_des_cipher = DES3.new(b"1234567812345678", DES3.MODE_ECB)
-
-    # AES in ECB mode (insecure)
-    aes_ecb_cipher = AES.new(b"16bytekey16bytekey", AES.MODE_ECB)
-
-    # AES in CBC mode without integrity check (vulnerable)
-    aes_cbc_cipher = AES.new(b"16bytekey16bytekey", AES.MODE_CBC)
-
-    # AES with short key (128-bit)
-    aes_short_key = AES.new(b"16bytekey16bytekey", key_size=128)
-
-# Asymmetric key cryptography
-def asymmetric_key_example():
-    # Small RSA key (insecure)
-    rsa_key = RSA.generate(1024)
-
-    # DSA (vulnerable)
-    dsa_key = DSA.generate(2048)
-
-    # Static Diffie-Hellman (no forward secrecy)
-    dh_key = "Static DH Example"
-
-# Digital signatures
-def digital_signature_example():
-    # MD5-based signature (insecure)
-    signature_md5 = PKCS1_v1_5.new(..., hashAlgo=hashlib.md5)
-
-    # SHA-1-based signature (deprecated)
-    signature_sha1 = PKCS1_v1_5.new(..., hashAlgo=hashlib.sha1)
-
-# Cryptographically insecure RNG
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
 def insecure_rng_example():
-    # Non-cryptographic RNG (insecure)
-    rng_value = random.random()
-
-# Deprecated or weak algorithms
-def deprecated_algorithms():
-    # RC4 (insecure)
+from Crypto.Cipher import AES
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+key = load_key_from_vault()
+import secrets
+secrets.token_bytes(32)
+secrets.token_bytes(32)
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import AES
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
     rc4_cipher = RC4.new(b"key")
-
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+PKCS1_OAEP.new($RSA_KEY)
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
+AES.new($ARGS, AES.MODE_GCM)
     # Blowfish (deprecated)
-    blowfish_cipher = Blowfish.new(b"key")
+from Crypto.Cipher import AES
+AES.new($ARGS, AES.MODE_GCM)
 
-    # IDEA (outdated)
+ECC.generate(curve='secp256r1')
     idea_cipher = IDEA.new(b"key")
 
-# Hardcoded cryptographic keys
+ECC.generate(curve='secp256r1')
 def hardcoded_keys():
-    key = "hardcoded-key"  # Hardcoded cryptographic key (insecure)
-
-# Avoid weak elliptic curves
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
+ECC.generate(curve='secp256r1')
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
 def weak_ecc_example():
     # ECC with weak curve (secp192r1)
     weak_ecc = ECC.generate(curve='secp192r1')
-
+from Crypto.Cipher import PKCS1_OAEP
+PKCS1_OAEP.new($RSA_KEY)
 # Improper padding in RSA
 def rsa_padding_example():
     # RSA without OAEP padding (vulnerable)

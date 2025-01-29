@@ -1,0 +1,10 @@
+{
+    "total_vulnerable_files": 19,
+    "vulnerable_files_by_extension": {
+        ".c": 8,
+        ".java": 5,
+        ".py": 6
+    },
+    "fixed_files": 15,
+    "pending_manual_fixes": 4
+}

@@ -55,8 +55,6 @@ AES_set_encrypt_key(..., 256, &aes_key);
 AES_set_encrypt_key(..., 256, &aes_key);
 // Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
 AES_set_encrypt_key(..., 256, &aes_key);
 
     const char *plaintext = "HelloDES";

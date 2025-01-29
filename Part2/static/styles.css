@@ -1,7 +1,16 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;
-    padding: 20px;
+    background: linear-gradient(
+                    rgba(0, 0, 0, 0.85),
+                    rgba(0, 0, 0, 0.85)
+                  ),
+                  url("{{ url_for('static', filename='img/bg.jpg') }}")
+                  no-repeat center center fixed !important; /* Added !important */
+    background-size: cover !important;
+    color: #ECECEC;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 }
 
 h1 {
@@ -16,10 +25,10 @@ h1 {
 .container {
     max-width: 1200px;
     margin: auto;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.1) !important; /* Semi-transparent white */
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px); /* Optional blur effect */
 }
 
 h2 {
@@ -32,7 +41,7 @@ table {
     margin-top: 20px;
     border-radius: 15px;
     overflow: hidden;
-    background-color: rgba(237, 219, 219, 0.11); /* Light gray shade background */
+    background-color:  transparent !important;
 }
 
 th, td {
@@ -41,7 +50,7 @@ th, td {
 }
 
 th {
-    background: #6a11cb;
+    background: #6a11cb !important;
     color: white;
     border: none;
 }
@@ -123,3 +132,38 @@ td {
     background-color: #f8d7da;
     color: #721c24;
 }
+
+.navbar-dark.bg-dark {
+      background-color: rgba(29, 29, 29, 0.9) !important;
+      backdrop-filter: blur(5px);
+      border-bottom: 1px solid #333;
+    }
+    .table {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .card {
+      background-color: rgba(0, 0, 0, 0.75) !important;
+      border: 1px solid #444;
+      color: #ECECEC;
+      border-radius: 10px;
+    }
+    .card-header {
+      background-color: rgba(0, 0, 0, 0.85);
+      border-bottom: 1px solid #555;
+    }
+    .btn-info {
+      background-color: #3956b4 !important;
+      border-color: #3956b4 !important;
+      color: #fff !important;
+    }
+    .btn-secondary {
+      background-color: #555 !important;
+      border-color: #666 !important;
+    }
+    .alert-info {
+      background-color: rgba(75, 75, 75, 0.9) !important;
+
+      border-color: #444;
+      color: #fff !important;
+    }

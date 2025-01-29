@@ -27,8 +27,6 @@ Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
 Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
 # Replace DES with AES (256-bit). For example, in CBC mode:
 Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-# Replace DES with AES (256-bit). For example, in CBC mode:
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
 Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
 
 # Plaintext

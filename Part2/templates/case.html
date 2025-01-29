@@ -20,7 +20,6 @@
     width: 100%;
     height: 300px;
   }
-  /* Severity badges */
   .severity-badge {
     display: inline-block;
     padding: 3px 8px;
@@ -44,11 +43,8 @@
 <h1 class="mb-4">Case: {{ case_name }}</h1>
 
 <div class="case-panel">
-  <!-- Stats card -->
   <div class="card mb-4">
-    <div class="card-header">
-      Case Statistics
-    </div>
+    <div class="card-header">Case Statistics</div>
     <div class="card-body">
       <div class="row">
         <div class="col-sm-4">
@@ -71,16 +67,17 @@
         </div>
       </div>
       <hr>
-      <p id="displayStatus" style="font-size:0.95em; color:#ccc;">
-        Now displaying: (all).
-      </p>
+      <!-- Fix All button -->
+      <form action="{{ url_for('fix_all', case_name=case_name) }}" method="POST">
+        <button type="submit" class="btn btn-warning">Fix All</button>
+      </form>
     </div>
   </div>
 
   <div class="row">
-    <!-- Table: col-md-8 for wide table -->
+    <!-- Table: wide col-md-8 -->
     <div class="col-md-8">
-      <div class="table-scroll rounded">
+      <div class="table-scroll">
         <table class="table table-bordered table-hover mb-0" id="findingsTable">
           <thead>
             <tr>
@@ -88,11 +85,14 @@
               <th>Line</th>
               <th>Message</th>
               <th>Severity</th>
+              <th>Fix</th>
             </tr>
           </thead>
           <tbody>
             {% set severity_map = {'info':'low','warning':'medium','error':'high'} %}
-            {% for (path, line, msg, sev) in rows %}
+            {% for (vuln_id, path, line, msg, sev) in rows %}
+
+            {% set lang = 'other' %}
             {% set low_path = (path or '')|lower %}
             {% if low_path.endswith('.py') %}
               {% set lang = 'python' %}
@@ -100,9 +100,8 @@
               {% set lang = 'java' %}
             {% elif low_path.endswith('.c') %}
               {% set lang = 'c' %}
-            {% else %}
-              {% set lang = 'other' %}
             {% endif %}
+
             <tr data-language="{{ lang }}"
                 data-severity="{{ severity_map[sev|lower]|default('low') }}">
               <td>{{ path }}</td>
@@ -112,6 +111,14 @@
                 <span class="severity-badge severity-{{ severity_map[sev|lower]|default('low') }}">
                   {{ severity_map[sev|lower]|default('low')|capitalize }}
                 </span>
+              </td>
+              <td>
+                <!-- Single fix button -->
+                <form action="{{ url_for('fix_vulnerability') }}" method="POST" style="display:inline;">
+                  <input type="hidden" name="vuln_id" value="{{ vuln_id }}">
+                  <input type="hidden" name="case_name" value="{{ case_name }}">
+                  <button type="submit" class="btn btn-sm btn-success">Fix</button>
+                </form>
               </td>
             </tr>
             {% endfor %}
@@ -133,51 +140,23 @@
 </div>
 
 <script>
-  // By default: everything is TRUE => display everything at first
-  let activeLanguages = {
-    python: true,
-    java: true,
-    c: true,
-    other: true
-  };
-  let activeSeverities = {
-    low: true,
-    medium: true,
-    high: true
-  };
-
-  const displayStatus = document.getElementById("displayStatus");
+  let activeLanguages = { python:true, java:true, c:true, other:true };
+  let activeSeverities = { low:true, medium:true, high:true };
 
   function updateTableVisibility() {
     const rows = document.querySelectorAll("#findingsTable tbody tr");
     rows.forEach(row => {
       const rowLang = row.dataset.language;
       const rowSev = row.dataset.severity;
-      // Show row if rowLang & rowSev are both ON
       if (activeLanguages[rowLang] && activeSeverities[rowSev]) {
         row.style.display = "";
       } else {
         row.style.display = "none";
       }
     });
-    updateDisplayText();
   }
 
-  function updateDisplayText() {
-    const langsOn = Object.keys(activeLanguages).filter(k => activeLanguages[k]);
-    const sevsOn = Object.keys(activeSeverities).filter(k => activeSeverities[k]);
-
-    let langText = langsOn.length ? langsOn.join(", ") : "(none)";
-    let sevText = sevsOn.length ? sevsOn.map(s => s.charAt(0).toUpperCase()+s.slice(1)).join(", ") : "(none)";
-
-    if (langsOn.length === 4 && sevsOn.length === 3) {
-      displayStatus.textContent = "Now displaying: (all).";
-    } else {
-      displayStatus.textContent = "Now displaying: " + langText + " with " + sevText + " severity.";
-    }
-  }
-
-  // ---- Language Chart ----
+  // Language Chart
   const langCtx = document.getElementById('langChart').getContext('2d');
   const langLabels = {{ languages|tojson }};
   const langData = {{ lang_values|tojson }};
@@ -197,17 +176,17 @@
     },
     options: {
       responsive: true,
-      onClick: (evt, elements) => {
+      onClick: function(evt, elements) {
         if (elements.length) {
-          const index = elements[0].index;
-          const label = langLabels[index]; 
+          const idx = elements[0].index;
+          const label = langLabels[idx];
           activeLanguages[label] = !activeLanguages[label];
           updateTableVisibility();
         }
       },
       plugins: {
         legend: {
-          onClick: (evt, legendItem, legend) => {
+          onClick: function(e, legendItem, legend) {
             const label = legendItem.text;
             activeLanguages[label] = !activeLanguages[label];
             updateTableVisibility();
@@ -217,10 +196,10 @@
     }
   });
 
-  // ---- Severity Chart ----
+  // Severity Chart
   const sevCtx = document.getElementById('severityChart').getContext('2d');
   const sevLabels = ["Low","Medium","High"];
-  const sevData = [{{ low_count }}, {{ med_count }}, {{ high_count }}];
+  const sevData = [{{ stats.info }}, {{ stats.warning }}, {{ stats.error }}];
   const sevColors = ['#4CAF50','#FF9800','#F44336'];
 
   const sevChart = new Chart(sevCtx, {
@@ -237,18 +216,18 @@
     },
     options: {
       responsive: true,
-      onClick: (evt, elements) => {
+      onClick: function(evt, elements) {
         if (elements.length) {
-          const index = elements[0].index;
+          const idx = elements[0].index;
           const sevMap = {0:'low',1:'medium',2:'high'};
-          const key = sevMap[index];
+          const key = sevMap[idx];
           activeSeverities[key] = !activeSeverities[key];
           updateTableVisibility();
         }
       },
       plugins: {
         legend: {
-          onClick: (evt, legendItem, legend) => {
+          onClick: function(e, legendItem, legend) {
             const label = legendItem.text.toLowerCase();
             activeSeverities[label] = !activeSeverities[label];
             updateTableVisibility();
@@ -258,7 +237,6 @@
     }
   });
 
-  // Initially, everything is ON => show all
   updateTableVisibility();
 </script>
 {% endblock %}

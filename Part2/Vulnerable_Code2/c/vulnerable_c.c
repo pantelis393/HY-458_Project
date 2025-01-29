@@ -17,17 +17,6 @@ AES_set_encrypt_key(key, 256, &aes_key)
 int main() {
 // Remove or load from a secure key management system
 unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
     const char *plaintext = "SensitiveData123";
     char encrypted[16];
     char decrypted[16];

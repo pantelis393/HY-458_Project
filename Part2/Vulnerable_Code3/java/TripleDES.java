@@ -19,7 +19,6 @@ Key myKey = loadKeyFromKMS(...);
 Key myKey = loadKeyFromKMS(...);
 Key myKey = loadKeyFromKMS(...);
 Key myKey = loadKeyFromKMS(...);
-Key myKey = loadKeyFromKMS(...);
 
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key);

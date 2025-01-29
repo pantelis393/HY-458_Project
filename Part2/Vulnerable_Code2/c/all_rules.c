@@ -9,53 +9,39 @@ void test_md5() {
     const char *message = "Hello, World!";
 // Replace with a call to SHA-256, e.g., SHA256(...)
 SHA256(...)
+
+    printf("MD5 Digest: ");
+    for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
+        printf("%02x", digest[i]);
+    }
+    printf("\n");
+}
+
+void test_sha1() {
+    unsigned char hash[SHA_DIGEST_LENGTH];
 SHA256(...)
 SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
-SHA256(...)
+
+    printf("SHA-1 Hash: ");
+    for (int i = 0; i < SHA_DIGEST_LENGTH; i++) {
+        printf("%02x", hash[i]);
+    }
+    printf("\n");
+}
+
+void test_des() {
+    DES_cblock key = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 // Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
 // Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
 AES_set_encrypt_key(..., 256, &aes_key);
 AES_set_encrypt_key(..., 256, &aes_key);
 

@@ -27,7 +27,6 @@ unsigned char *key = retrieve_key_from_secure_storage();
 unsigned char *key = retrieve_key_from_secure_storage();
 unsigned char *key = retrieve_key_from_secure_storage();
 unsigned char *key = retrieve_key_from_secure_storage();
-unsigned char *key = retrieve_key_from_secure_storage();
     const char *plaintext = "SensitiveData123";
     char encrypted[16];
     char decrypted[16];
