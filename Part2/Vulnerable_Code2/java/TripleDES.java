@@ -7,8 +7,7 @@ import java.util.Base64;
 public class TripleDES {
     public static void main(String[] args) throws Exception {
         byte[] keyBytes = "123456781234567812345678".getBytes();
-// Use a secure key management system or KMS retrieval
-Key myKey = loadKeyFromKMS(...);
+        SecretKey key = new SecretKeySpec(keyBytes, "DESede");
 
         Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key);

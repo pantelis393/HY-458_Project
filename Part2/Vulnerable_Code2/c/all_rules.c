@@ -7,8 +7,7 @@
 void test_md5() {
     unsigned char digest[MD5_DIGEST_LENGTH];
     const char *message = "Hello, World!";
-// Replace with a call to SHA-256, e.g., SHA256(...)
-SHA256(...)
+    MD5((const unsigned char *)message, strlen(message), digest);
 
     printf("MD5 Digest: ");
     for (int i = 0; i < MD5_DIGEST_LENGTH; i++) {
@@ -19,8 +18,8 @@ SHA256(...)
 
 void test_sha1() {
     unsigned char hash[SHA_DIGEST_LENGTH];
-SHA256(...)
-SHA256(...)
+    const char *message = "Hello, World!";
+    SHA1((const unsigned char *)message, strlen(message), hash);
 
     printf("SHA-1 Hash: ");
     for (int i = 0; i < SHA_DIGEST_LENGTH; i++) {
@@ -31,19 +30,8 @@ SHA256(...)
 
 void test_des() {
     DES_cblock key = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
-AES_set_encrypt_key(..., 256, &aes_key);
+    DES_key_schedule schedule;
+    DES_set_key(&key, &schedule);
 
     const char *plaintext = "HelloDES";
     char ciphertext[16];

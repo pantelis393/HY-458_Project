@@ -6,12 +6,12 @@ import javax.crypto.Cipher;
 
 public class RSANoPadding {
     public static void main(String[] args) throws Exception {
-KeyPairGenerator.getInstance("RSA").initialize(2048);
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA").initialize(512);
         KeyPair pair = keyGen.generateKeyPair();
         PublicKey publicKey = pair.getPublic();
         PrivateKey privateKey = pair.getPrivate();
 
-Cipher.getInstance("RSA/ECB/OAEPWithSHA-256AndMGF1Padding");
+        Cipher cipher = Cipher.getInstance("RSA/ECB/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 
         String plaintext = "Sensitive";

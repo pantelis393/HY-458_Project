@@ -5,8 +5,7 @@
 int main() {
     DES_cblock key = {"12345678"};
     DES_key_schedule schedule;
-// Replace with AES key setup call, e.g.:
-AES_set_encrypt_key(..., 256, &aes_key);
+    DES_set_key(&key, &schedule);
 
     const char *plaintext = "This is a secret!";
     char ciphertext[64] = {0};

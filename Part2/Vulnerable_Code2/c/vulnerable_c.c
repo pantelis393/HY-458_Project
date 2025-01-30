@@ -6,7 +6,7 @@
 void encrypt_decrypt(const char *input, char *output, const unsigned char *key, int encrypt) {
     AES_KEY aes_key;
     if (encrypt) {
-AES_set_encrypt_key(key, 256, &aes_key)
+        AES_set_encrypt_key(key, 128, &aes_key);
         AES_encrypt((const unsigned char *)input, (unsigned char *)output, &aes_key);
     } else {
         AES_set_decrypt_key(key, 128, &aes_key);
@@ -15,8 +15,7 @@ AES_set_encrypt_key(key, 256, &aes_key)
 }
 
 int main() {
-// Remove or load from a secure key management system
-unsigned char *key = retrieve_key_from_secure_storage();
+    const unsigned char key[16] = "hardcodedkey123"; // Hardcoded Key
     const char *plaintext = "SensitiveData123";
     char encrypted[16];
     char decrypted[16];

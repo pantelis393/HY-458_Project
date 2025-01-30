@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int main() {
-RSA_generate_key(2048, ...)
+    RSA *rsa = RSA_generate_key(512, RSA_F4, NULL, NULL);
     char plaintext[64] = "Sensitive Data";
     unsigned char encrypted[256];
     unsigned char decrypted[256];

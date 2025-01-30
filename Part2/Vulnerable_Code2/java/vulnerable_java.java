@@ -8,7 +8,7 @@ public class VulnerableHash {
         String password = "super_secret_password";
 
         // Use of insecure hashing algorithm MD5
-MessageDigest.getInstance("SHA-256")
+        MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] hash = md.digest(password.getBytes());
 
         // Print the hash

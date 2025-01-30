@@ -1,19 +1,7 @@
 from Crypto.Cipher import DES
 
-# Remove or load from a secure key management system.
-# Replace DES with AES (256-bit). For example, in CBC mode:
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-# Replace DES with AES (256-bit). For example, in CBC mode:
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
-Crypto.Cipher.AES.new($ARGS, Crypto.Cipher.AES.MODE_CBC)
+key = b'12345678'  # Key must be exactly 8 bytes
+cipher = DES.new(key, DES.MODE_ECB)
 
 plaintext = b'This is a secret!'  # Input text
 # Padding

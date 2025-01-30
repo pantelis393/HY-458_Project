@@ -12,7 +12,7 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO)
 
 
-def create_database(db_file="semgrep_results.db", reset=False):
+def create_database(db_file, reset=False):
     """
     Create or recreate the SQLite database and table for Semgrep results.
     If 'reset' is True, the existing table (if any) is dropped.
@@ -51,18 +51,39 @@ def create_database(db_file="semgrep_results.db", reset=False):
 
 def save_to_database(findings, db_file, scan_name, scan_date):
     """
-    Save Semgrep findings into the SQLite database with a given scan name and date.
-
-    Args:
-        findings (list): List of Semgrep findings (dicts).
-        db_file (str): Path to the SQLite database file.
-        scan_name (str): User-specified name for this scan.
-        scan_date (str): Timestamp for when this scan occurred.
+    Save Semgrep findings into the SQLite database with a given scan name and date,
+    skipping duplicates if they already exist in the table.
     """
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
 
     for finding in findings:
+        file_path = finding.get("path")
+        line_start = finding.get("start", {}).get("line")
+        line_end = finding.get("end", {}).get("line")
+        col_start = finding.get("start", {}).get("col")
+        col_end = finding.get("end", {}).get("col")
+        check_id = finding.get("check_id")
+        message = finding.get("extra", {}).get("message")
+        severity = finding.get("extra", {}).get("severity")
+
+        # Check if this vulnerability already exists for this case
+        cursor.execute("""
+            SELECT 1
+              FROM semgrep_results
+             WHERE scan_name=?
+               AND file_path=?
+               AND line_start=?
+               AND check_id=?
+             LIMIT 1
+        """, (scan_name, file_path, line_start, check_id))
+        existing = cursor.fetchone()
+
+        if existing:
+            # Already in DB => skip insertion
+            continue
+
+        # Insert new record if it doesn't exist yet
         cursor.execute("""
             INSERT INTO semgrep_results (
                 scan_name,
@@ -79,14 +100,14 @@ def save_to_database(findings, db_file, scan_name, scan_date):
         """, (
             scan_name,
             scan_date,
-            finding.get("path"),
-            finding.get("start", {}).get("line"),
-            finding.get("end", {}).get("line"),
-            finding.get("start", {}).get("col"),
-            finding.get("end", {}).get("col"),
-            finding.get("check_id"),
-            finding.get("extra", {}).get("message"),
-            finding.get("extra", {}).get("severity")
+            file_path,
+            line_start,
+            line_end,
+            col_start,
+            col_end,
+            check_id,
+            message,
+            severity
         ))
 
     conn.commit()
@@ -120,7 +141,7 @@ def gather_all_files(target_path):
     return all_files
 
 
-def run_semgrep(rule_file: str, target: str) -> list:
+def run_semgrep(rule_file, target):
     """
     Run Semgrep on a target file/directory with a specific rule file.
     """
@@ -149,7 +170,7 @@ def run_semgrep(rule_file: str, target: str) -> list:
         return []
 
 
-def display_findings(findings: list, all_scanned_files: list):
+def display_findings(findings, all_scanned_files):
     """
     Display findings in a readable format and list all scanned files.
 
@@ -201,12 +222,6 @@ def display_findings(findings: list, all_scanned_files: list):
 def get_language_from_extension(file_path):
     """
     Determine the programming language based on file extension.
-
-    Args:
-        file_path (str): Path to the file.
-
-    Returns:
-        str: The guessed programming language.
     """
     ext = os.path.splitext(file_path)[1].lower()
     if ext == '.py':
@@ -220,28 +235,30 @@ def get_language_from_extension(file_path):
 
 
 if __name__ == "__main__":
-    # Define default rule file and target
-    default_rule_file = "rules.yaml"
-    default_target = "Vulnerable_Code"
-
-    # Parse command-line arguments
     parser = argparse.ArgumentParser(description='Run Semgrep with specified rules and target.')
     parser.add_argument('--rules', help='Path to the Semgrep rule file (YAML).')
     parser.add_argument('--target', help='Path to the target file or directory to scan.')
-    parser.add_argument('--db', help='Path to the SQLite database file.', default="semgrep_results.db")
+    parser.add_argument('--db', help='Path to the SQLite database file.')
     parser.add_argument('--reset-db', help='Reset the database by dropping and recreating the table.', action='store_true')
 
     args = parser.parse_args()
 
-    rule_file = args.rules if args.rules else default_rule_file
-    target = args.target if args.target else default_target
-    db_file = args.db
-    reset_db = args.reset_db
+    # If rules/target/db are not provided as CLI arguments, prompt for them
+    if not args.rules:
+        args.rules = input("Enter the path to your Semgrep rules file: ").strip()
+    if not args.target:
+        args.target = input("Enter the path to the target file/folder to scan: ").strip()
+    if not args.db:
+        default_db = "semgrep_results.db"
+        user_db = input(f"Enter path to the DB file (or press ENTER for '{default_db}'): ").strip()
+        args.db = user_db if user_db else default_db
+
+    # At this point, args.rules, args.target, and args.db are set one way or another
 
     # Create/reset the database if needed
-    create_database(db_file, reset=reset_db)
+    create_database(args.db, reset=args.reset_db)
 
-    # Prompt the user for a scan name
+    # Prompt for a scan name
     scan_name = input("Enter a name for this scan: ").strip()
     if not scan_name:
         scan_name = "Unnamed_Scan"
@@ -250,14 +267,14 @@ if __name__ == "__main__":
     scan_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Gather all files in the target
-    all_files = gather_all_files(target)
+    all_files = gather_all_files(args.target)
 
     # Run Semgrep
-    findings = run_semgrep(rule_file, target)
+    findings = run_semgrep(args.rules, args.target)
 
     # Display results in the console
     display_findings(findings, all_files)
 
-    # Save findings to the database with the given name/date
-    save_to_database(findings, db_file, scan_name, scan_date)
-    logging.info(f"Results saved to database: {db_file} (scan: '{scan_name}', date: {scan_date})")
+    # Save findings to the database, skipping duplicates
+    save_to_database(findings, args.db, scan_name, scan_date)
+    logging.info(f"Results saved to database: {args.db} (scan: '{scan_name}', date: {scan_date})")

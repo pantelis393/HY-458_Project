@@ -20,6 +20,7 @@
     width: 100%;
     height: 300px;
   }
+  /* Severity badges */
   .severity-badge {
     display: inline-block;
     padding: 3px 8px;
@@ -43,8 +44,11 @@
 <h1 class="mb-4">Case: {{ case_name }}</h1>
 
 <div class="case-panel">
+  <!-- Stats card -->
   <div class="card mb-4">
-    <div class="card-header">Case Statistics</div>
+    <div class="card-header">
+      Case Statistics
+    </div>
     <div class="card-body">
       <div class="row">
         <div class="col-sm-4">
@@ -67,17 +71,23 @@
         </div>
       </div>
       <hr>
-      <!-- Fix All button -->
-      <form action="{{ url_for('fix_all', case_name=case_name) }}" method="POST">
+      <p id="displayStatus" style="font-size:0.95em; color:#ccc;">
+        Now displaying: (all).
+      </p>
+
+      <!-- "Fix All" button -->
+      <form action="{{ url_for('fix_all_vulnerabilities') }}" method="POST" class="mt-2">
+        <input type="hidden" name="case_name" value="{{ case_name }}">
         <button type="submit" class="btn btn-warning">Fix All</button>
       </form>
+
     </div>
   </div>
 
   <div class="row">
-    <!-- Table: wide col-md-8 -->
+    <!-- Table: col-md-8 for wide table -->
     <div class="col-md-8">
-      <div class="table-scroll">
+      <div class="table-scroll rounded">
         <table class="table table-bordered table-hover mb-0" id="findingsTable">
           <thead>
             <tr>
@@ -91,8 +101,6 @@
           <tbody>
             {% set severity_map = {'info':'low','warning':'medium','error':'high'} %}
             {% for (vuln_id, path, line, msg, sev) in rows %}
-
-            {% set lang = 'other' %}
             {% set low_path = (path or '')|lower %}
             {% if low_path.endswith('.py') %}
               {% set lang = 'python' %}
@@ -100,8 +108,9 @@
               {% set lang = 'java' %}
             {% elif low_path.endswith('.c') %}
               {% set lang = 'c' %}
+            {% else %}
+              {% set lang = 'other' %}
             {% endif %}
-
             <tr data-language="{{ lang }}"
                 data-severity="{{ severity_map[sev|lower]|default('low') }}">
               <td>{{ path }}</td>
@@ -113,7 +122,7 @@
                 </span>
               </td>
               <td>
-                <!-- Single fix button -->
+                <!-- Individual Fix button -->
                 <form action="{{ url_for('fix_vulnerability') }}" method="POST" style="display:inline;">
                   <input type="hidden" name="vuln_id" value="{{ vuln_id }}">
                   <input type="hidden" name="case_name" value="{{ case_name }}">
@@ -140,8 +149,20 @@
 </div>
 
 <script>
-  let activeLanguages = { python:true, java:true, c:true, other:true };
-  let activeSeverities = { low:true, medium:true, high:true };
+  // By default: everything is TRUE => display everything at first
+  let activeLanguages = {
+    python: true,
+    java: true,
+    c: true,
+    other: true
+  };
+  let activeSeverities = {
+    low: true,
+    medium: true,
+    high: true
+  };
+
+  const displayStatus = document.getElementById("displayStatus");
 
   function updateTableVisibility() {
     const rows = document.querySelectorAll("#findingsTable tbody tr");
@@ -154,9 +175,24 @@
         row.style.display = "none";
       }
     });
+    updateDisplayText();
   }
 
-  // Language Chart
+  function updateDisplayText() {
+    const langsOn = Object.keys(activeLanguages).filter(k => activeLanguages[k]);
+    const sevsOn = Object.keys(activeSeverities).filter(k => activeSeverities[k]);
+
+    let langText = langsOn.length ? langsOn.join(", ") : "(none)";
+    let sevText = sevsOn.length ? sevsOn.map(s => s.charAt(0).toUpperCase()+s.slice(1)).join(", ") : "(none)";
+
+    if (langsOn.length === 4 && sevsOn.length === 3) {
+      displayStatus.textContent = "Now displaying: (all).";
+    } else {
+      displayStatus.textContent = "Now displaying: " + langText + " with " + sevText + " severity.";
+    }
+  }
+
+  // ---- Language Chart ----
   const langCtx = document.getElementById('langChart').getContext('2d');
   const langLabels = {{ languages|tojson }};
   const langData = {{ lang_values|tojson }};
@@ -176,17 +212,17 @@
     },
     options: {
       responsive: true,
-      onClick: function(evt, elements) {
+      onClick: (evt, elements) => {
         if (elements.length) {
-          const idx = elements[0].index;
-          const label = langLabels[idx];
+          const index = elements[0].index;
+          const label = langLabels[index]; 
           activeLanguages[label] = !activeLanguages[label];
           updateTableVisibility();
         }
       },
       plugins: {
         legend: {
-          onClick: function(e, legendItem, legend) {
+          onClick: (evt, legendItem, legend) => {
             const label = legendItem.text;
             activeLanguages[label] = !activeLanguages[label];
             updateTableVisibility();
@@ -196,10 +232,10 @@
     }
   });
 
-  // Severity Chart
+  // ---- Severity Chart ----
   const sevCtx = document.getElementById('severityChart').getContext('2d');
   const sevLabels = ["Low","Medium","High"];
-  const sevData = [{{ stats.info }}, {{ stats.warning }}, {{ stats.error }}];
+  const sevData = [{{ low_count }}, {{ med_count }}, {{ high_count }}];
   const sevColors = ['#4CAF50','#FF9800','#F44336'];
 
   const sevChart = new Chart(sevCtx, {
@@ -216,18 +252,18 @@
     },
     options: {
       responsive: true,
-      onClick: function(evt, elements) {
+      onClick: (evt, elements) => {
         if (elements.length) {
-          const idx = elements[0].index;
+          const index = elements[0].index;
           const sevMap = {0:'low',1:'medium',2:'high'};
-          const key = sevMap[idx];
+          const key = sevMap[index];
           activeSeverities[key] = !activeSeverities[key];
           updateTableVisibility();
         }
       },
       plugins: {
         legend: {
-          onClick: function(e, legendItem, legend) {
+          onClick: (evt, legendItem, legend) => {
             const label = legendItem.text.toLowerCase();
             activeSeverities[label] = !activeSeverities[label];
             updateTableVisibility();
@@ -237,6 +273,7 @@
     }
   });
 
+  // Initially, everything is ON => show all
   updateTableVisibility();
 </script>
 {% endblock %}
