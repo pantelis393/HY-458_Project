@@ -1,15 +1,22 @@
 errors:
+- code: 2
+  level: error
+  message: "Rule parse error in rule detect-hardcoded-keys:\n Invalid pattern for\
+    \ Python: Stdlib.Parsing.Parse_error\n----- pattern -----\nCrypto.Cipher.<...>.new(...,\
+    \ key=key, ...)\n\n----- end pattern -----\n"
+  rule_id: detect-hardcoded-keys
+  type: Rule parse error
 - code: 3
   level: warn
-  message: "Syntax error at line /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/vulnerable_java.java:1:\n\
+  message: "Syntax error at line /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/VulnerableHash.java:1:\n\
     \ `## Java - Deprecated MD5 Hashing` was unexpected"
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/vulnerable_java.java
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/VulnerableHash.java
   spans:
   - end:
       col: 33
       line: 1
       offset: 32
-    file: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/vulnerable_java.java
+    file: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/VulnerableHash.java
     start:
       col: 1
       line: 1
@@ -20,7 +27,7 @@ errors:
         col: 33
         line: 1
         offset: 32
-      path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/vulnerable_java.java
+      path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/VulnerableHash.java
       start:
         col: 1
         line: 1
@@ -28,61 +35,21 @@ errors:
 interfile_languages_used: []
 paths:
   scanned:
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/all_rules.c
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/des_ecb.c
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/rsa_short_key.c
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/sha1_hash.c
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/vulnerable_c.c
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/MD5Hash.java
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/RSANoPadding.java
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/TripleDES.java
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/vulnerable_java.java
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/des_ecb.py
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/md5_hash.py
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/rsa_short_key.py
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/sha2.py
-  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/vulnerable.py
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/all_rules.c
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/des_ecb.c
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/rsa_short_key.c
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/sha1_hash.c
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/vulnerable_c.c
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/MD5Hash.java
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/RSANoPadding.java
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/TripleDES.java
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/VulnerableHash.java
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/des_ecb.py
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/md5_hash.py
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/rsa_short_key.py
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/sha2.py
+  - /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/vulnerable.py
 results:
-- check_id: detect-md5-c
-  end:
-    col: 65
-    line: 10
-    offset: 285
-  extra:
-    engine_kind: OSS
-    fingerprint: 5e0bbf9a807bb976eb33eed5a7ad6fea62a586928ec132b5ce8562c63b61d4e802137e1f4eb03c088859d12235dc21c8a5ea160cacfea2c63180b34e5a8f14a9_0
-    is_ignored: false
-    lines: '    MD5((const unsigned char *)message, strlen(message), digest);'
-    message: MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
-    metadata: {}
-    metavars: {}
-    severity: ERROR
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/all_rules.c
-  start:
-    col: 5
-    line: 10
-    offset: 225
-- check_id: detect-sha1-c
-  end:
-    col: 64
-    line: 22
-    offset: 596
-  extra:
-    engine_kind: OSS
-    fingerprint: cef4dbc0c245c7c3d675145149a964eb9f815aa07aced2a48fc602acdb3c1fb10a72f89e660e7f8fe2fa3749208ba635947d2b393c4a67bb7739acaee92d8c4f_0
-    is_ignored: false
-    lines: '    SHA1((const unsigned char *)message, strlen(message), hash);'
-    message: SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3.
-    metadata: {}
-    metavars: {}
-    severity: WARNING
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/all_rules.c
-  start:
-    col: 5
-    line: 22
-    offset: 537
 - check_id: detect-des-c
   end:
     col: 33
@@ -90,16 +57,15 @@ results:
     offset: 889
   extra:
     engine_kind: OSS
-    fingerprint: d5863cbee3520034278eeb26fd69107cd9198982f89bda39c6ed59d4f04da7d21b35d4ea1cc67aca1709da00afe567d3cb917bd5862622df8bd48e6f4a177988_0
+    fingerprint: d9b9d0f2485ee1fc2ac72a8a4e7932c7bdf4cee5cc6be47ad82478873395924f0e354c60ff37ac3ca4309b74a6dc42ebcb082b4919e3d84cf3b31c64280b4f12_0
     is_ignored: false
     lines: '    DES_set_key(&key, &schedule);'
-    message: DES is insecure due to its small key size and vulnerability to brute-force
-      attacks. Use AES-256 instead.
+    message: DES is insecure. Use AES-256.
     metadata: {}
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/all_rules.c
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/all_rules.c
   start:
     col: 5
     line: 34
@@ -111,16 +77,15 @@ results:
     offset: 176
   extra:
     engine_kind: OSS
-    fingerprint: 283e7304bf434941255e5fe60a000cff59b775a7f16051620fb92ca5048b3b46d16964badcb9046c7392fbdd9eaa957c565b68a8511985e17bea76f22a20d108_0
+    fingerprint: 6cd647b91aff8a339fa2dfb1b00d690c705273126960409ecc24004a2330ace4fee37bf0c2a10d42d6d2e9889e81edcb593ef24294d19edeaf2a1169745053f3_0
     is_ignored: false
     lines: '    DES_set_key(&key, &schedule);'
-    message: DES is insecure due to its small key size and vulnerability to brute-force
-      attacks. Use AES-256 instead.
+    message: DES is insecure. Use AES-256.
     metadata: {}
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/des_ecb.c
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/des_ecb.c
   start:
     col: 5
     line: 8
@@ -132,10 +97,10 @@ results:
     offset: 139
   extra:
     engine_kind: OSS
-    fingerprint: 2ba35bf0df6b840076910b2c363581888b9f505b0a7d213eee0af45d2a979a109e40971863b0cae7ce379492792810f2c6a51dda9487f62ab6e73088bb95131a_0
+    fingerprint: a69562ed2c1ff73d460621ae2bb84873b59882ea7ed6529e617b663d5b50981e8c1f4c1ddde008a4e5a4e9ba984dc6ebc67b308900369c1e71d53860c3b344bd_0
     is_ignored: false
     lines: '    RSA *rsa = RSA_generate_key(512, RSA_F4, NULL, NULL);'
-    message: RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits.
+    message: RSA <2048 bits is insecure.
     metadata: {}
     metavars:
       $X:
@@ -150,31 +115,11 @@ results:
           offset: 115
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/rsa_short_key.c
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/rsa_short_key.c
   start:
     col: 16
     line: 6
     offset: 98
-- check_id: detect-sha1-c
-  end:
-    col: 64
-    line: 9
-    offset: 231
-  extra:
-    engine_kind: OSS
-    fingerprint: 5544cf5fc7c7c458618690eadbeb5884c08e123242456d011c4ce5b4276c6cdfee07c143f9034a3ecc7b9a9d35c25a56df8ff4908e52adfadfea15ec6cd5a531_0
-    is_ignored: false
-    lines: '    SHA1((const unsigned char *)message, strlen(message), hash);'
-    message: SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3.
-    metadata: {}
-    metavars: {}
-    severity: WARNING
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/sha1_hash.c
-  start:
-    col: 5
-    line: 9
-    offset: 172
 - check_id: detect-weak-aes-c
   end:
     col: 48
@@ -182,70 +127,29 @@ results:
     offset: 267
   extra:
     engine_kind: OSS
-    fingerprint: 6d79acf3804a400f62b7944904eb29ec50e011849b544ee7181608eba21308dee93d81c45db05bf521ad2121b8536e53fefe5a8448755176cecf93bc3ff92833_0
+    fingerprint: 2b793a87886de4f33753a402f646b11f08e0c7b1c0865c025731642c70deebbf090a40e1791ecb00d7b1be59e578c9116010d779a306eeba354147e50196205e_0
     is_ignored: false
     lines: '        AES_set_encrypt_key(key, 128, &aes_key);'
-    message: AES keys smaller than 256 bits are insecure. Use at least 256 bits.
+    message: AES keys <256 bits are insecure.
     metadata: {}
     metavars:
       $X:
-        abstract_content: '128'
+        abstract_content: key
         end:
-          col: 37
+          col: 32
           line: 9
-          offset: 256
+          offset: 251
         start:
-          col: 34
+          col: 29
           line: 9
-          offset: 253
+          offset: 248
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/vulnerable_c.c
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/c/vulnerable_c.c
   start:
     col: 9
     line: 9
     offset: 228
-- check_id: detect-static-key-c
-  end:
-    col: 53
-    line: 18
-    offset: 577
-  extra:
-    engine_kind: OSS
-    fingerprint: 4b7a5e5799d2b3276d6b0f553714c3b02824c1ef2155f4333cec28731394c2c69dc5447a9c31046dfb60fc1719d7072019c4ecbdbb07627fa4c6050d38b12426_0
-    is_ignored: false
-    lines: '    const unsigned char key[16] = "hardcodedkey123"; // Hardcoded Key'
-    message: Hardcoded cryptographic keys are insecure. Use a secure key management
-      system.
-    metadata: {}
-    metavars:
-      $SIZE:
-        abstract_content: '16'
-        end:
-          col: 31
-          line: 18
-          offset: 555
-        start:
-          col: 29
-          line: 18
-          offset: 553
-      $VALUE:
-        abstract_content: '"hardcodedkey123"'
-        end:
-          col: 52
-          line: 18
-          offset: 576
-        start:
-          col: 35
-          line: 18
-          offset: 559
-    severity: ERROR
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/c/vulnerable_c.c
-  start:
-    col: 5
-    line: 18
-    offset: 529
 - check_id: detect-md5-java
   end:
     col: 60
@@ -253,30 +157,30 @@ results:
     offset: 221
   extra:
     engine_kind: OSS
-    fingerprint: f10461551cefe5c8147b7ef94b14f0c90d4a05e65a1607c8891751a0251615e7748b678913e6b404e776128963a5e358744b00c4111a511de0935d5b72b5199b_0
+    fingerprint: 0bd92c4e874c2218f42a6ea3e647d01ccaa7ef2a9c8c09015ef328cb8a825adc6a2984191d5f3860d929955c07db497cb4effa85014f93a3d55ee1c96c67af4f_0
     is_ignored: false
     lines: '        MessageDigest md = MessageDigest.getInstance("MD5");'
-    message: MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
+    message: MD5 is insecure. Use SHA-256/3.
     metadata: {}
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/MD5Hash.java
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/MD5Hash.java
   start:
     col: 28
     line: 6
     offset: 189
 - check_id: detect-weak-rsa-java
   end:
-    col: 87
+    col: 86
     line: 9
-    offset: 339
+    offset: 338
   extra:
     engine_kind: OSS
-    fingerprint: 31f9adc46c535077bc21c4760738638bd99dbee358fbdc50ca54019b4b5e607a6e67b4d28dfc8031bb6479090b2256d23329fba42039de8739952e0686642ac6_0
+    fingerprint: 7b37b5914c7c75b57c56bad88d6f6e4a1d49ac7a11796976316a3437c5fe0f07dd7b4391a66a3d5587b4ddee40da8ffd1f905de25986b1c47a4f68e3795c0cc1_0
     is_ignored: false
     lines: '        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA").initialize(512);'
-    message: RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits.
+    message: RSA <2048 bits is insecure.
     metadata: {}
     metavars:
       $X:
@@ -291,19 +195,19 @@ results:
           offset: 334
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/RSANoPadding.java
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/RSANoPadding.java
   start:
-    col: 9
+    col: 35
     line: 9
-    offset: 261
+    offset: 287
 - check_id: detect-rsa-no-padding-java
   end:
-    col: 65
+    col: 64
     line: 14
-    offset: 553
+    offset: 552
   extra:
     engine_kind: OSS
-    fingerprint: f988aaafb6e19ade09302b4263fea695105f51eb49561276896d25658d0efaf01083205c7f811757981949918ec73f4af66c19f34940581c51c5c2058bf1d6f2_0
+    fingerprint: 1279bdf86a0833266b169128149c1b427f1066340c793021ff436981e68a6caa8ef5e60105b9b48952f1e279c7b14535627a348856708761b08ae755b2f10057_0
     is_ignored: false
     lines: '        Cipher cipher = Cipher.getInstance("RSA/ECB/NoPadding");'
     message: No padding detected
@@ -311,32 +215,11 @@ results:
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/RSANoPadding.java
-  start:
-    col: 9
-    line: 14
-    offset: 497
-- check_id: detect-static-key-java
-  end:
-    col: 62
-    line: 10
-    offset: 372
-  extra:
-    engine_kind: OSS
-    fingerprint: cf67cf4a045b974073db3a7dae736daa1785eeb70385ca1ea5328d79ec13623013467953d1117506a02152a42b86b2f605bbc4eb5e2e4de25dddc9e12959c0d8_0
-    is_ignored: false
-    lines: '        SecretKey key = new SecretKeySpec(keyBytes, "DESede");'
-    message: Hardcoded cryptographic keys are insecure. Use a secure key management
-      system.
-    metadata: {}
-    metavars: {}
-    severity: ERROR
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/TripleDES.java
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/RSANoPadding.java
   start:
     col: 25
-    line: 10
-    offset: 335
+    line: 14
+    offset: 513
 - check_id: detect-md5-java
   end:
     col: 60
@@ -344,40 +227,19 @@ results:
     offset: 430
   extra:
     engine_kind: OSS
-    fingerprint: 95e1cd347820e2cafe89155a0fcb6a4cf9ee9674d1b6cb689d21b5463d750cbf6793ceb8e1c399602fe800c0a2c8c77cc9dbedcc0737c221c34336ceece67002_0
+    fingerprint: 5405bfdabd91a9ce42832cc3de2ff0a2c2902df3b67ce9c842c372f89ca92d67730744413aa25a0cf93e6b562f2ba6d8d718a6664be83dae693d5dfacde569df_0
     is_ignored: false
     lines: '        MessageDigest md = MessageDigest.getInstance("MD5");'
-    message: MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
+    message: MD5 is insecure. Use SHA-256/3.
     metadata: {}
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/java/vulnerable_java.java
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/java/VulnerableHash.java
   start:
     col: 28
     line: 11
     offset: 398
-- check_id: detect-hardcoded-keys
-  end:
-    col: 18
-    line: 3
-    offset: 48
-  extra:
-    engine_kind: OSS
-    fingerprint: 2e7cb62d1a8d08d4a2bebfbf9105e681a3cbceaa1c8714d22d63432b410c16e44081a14c3932b8ddf4ee952ecb8cede6172b30ed66d56ff82f4ab7a4b47f1d00_0
-    is_ignored: false
-    lines: 'key = b''12345678''  # Key must be exactly 8 bytes'
-    message: Hard-coded cryptographic keys are insecure. Use secure key management
-      practices.
-    metadata: {}
-    metavars: {}
-    severity: ERROR
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/des_ecb.py
-  start:
-    col: 1
-    line: 3
-    offset: 31
 - check_id: detect-des
   end:
     col: 36
@@ -385,16 +247,15 @@ results:
     offset: 115
   extra:
     engine_kind: OSS
-    fingerprint: c129df0797d6f9746e3351f9a5489bac6d5c50f37f147ea6daf371ff91850b1068e7c22e42046937119cf3870283e8fc57bb128f3d480772d581795dc22a11fa_0
+    fingerprint: abea71e1d79acc6f784f61dd3ff0ddd52dd59fe98df758d7ac4e355e0533a3bb645c2fe58bede9ca64ab8e5979241969eca5735a80e0ace8114c8559315ef73f_0
     is_ignored: false
     lines: cipher = DES.new(key, DES.MODE_ECB)
-    message: DES is insecure due to its small key size and is easily brute-forced.
-      Use AES-256.
+    message: DES is insecure due to its small key size. Use AES-256.
     metadata: {}
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/des_ecb.py
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/des_ecb.py
   start:
     col: 10
     line: 4
@@ -406,7 +267,7 @@ results:
     offset: 92
   extra:
     engine_kind: OSS
-    fingerprint: a8d03c7eaaad17120e14a94d98208201da6d4d8ba807c2757c4441189eb83a3b0dcc67bb47a9e893c91e087d2fa328ff95664a3e23a6308b279eea269e902aba_0
+    fingerprint: 69c1a814d6256ca7d3b1bbdedc7264572d4301d6de633bb7c45146e1d3a424107c0c0f5ac9ca1c93064662f3cefde12119cdd6e764622bf505b266a97948d5b9_0
     is_ignored: false
     lines: md5_hash = hashlib.md5(password.encode()).hexdigest()
     message: Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
@@ -414,41 +275,41 @@ results:
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/md5_hash.py
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/md5_hash.py
   start:
     col: 12
     line: 4
     offset: 62
 - check_id: detect-small-rsa
   end:
-    col: 19
+    col: 25
     line: 5
-    offset: 125
+    offset: 131
   extra:
     engine_kind: OSS
-    fingerprint: 65f42f89cfd499c0b0f97a1443db82f6a5dab44a1643292a701362a54acf28c4b47f4f3462ec8f07aee995a5cb37793c37ecf6a8f57e7ee6c934437745437d28_0
+    fingerprint: e13ceb6f0b172d6fd58f029afad1ea2a7c0e24de8bb5ceedf48b3500d6012e2e25e48b3f8afbc568751cfe55def66b37846958096a157b1d59ed86adc24a3298_0
     is_ignored: false
-    lines: RSA.generate(2048)
-    message: RSA keys smaller than 2048 bits are insecure. Use at least 2048 bits.
+    lines: key = RSA.generate(2048)public_key = key.publickey()
+    message: "RSA < 2048 bits is insecure. Use \u22652048."
     metadata: {}
     metavars:
       $X:
         abstract_content: '2048'
         end:
-          col: 18
+          col: 24
           line: 5
-          offset: 124
+          offset: 130
         start:
-          col: 14
+          col: 20
           line: 5
-          offset: 120
+          offset: 126
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/rsa_short_key.py
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/rsa_short_key.py
   start:
-    col: 1
+    col: 7
     line: 5
-    offset: 107
+    offset: 113
 - check_id: detect-sha2
   end:
     col: 55
@@ -456,41 +317,19 @@ results:
     offset: 165
   extra:
     engine_kind: OSS
-    fingerprint: 581ce5dfc2e3e2c80fe1fdb2008999b4cd134a16348c1db446fedb9b9678a12f62b025e090f0920a6b1499ec5562353d8e2d279add002391f0337b56914ef827_0
+    fingerprint: 31c5dfc5c271300e5993382bc7dc4200ba7882585e439e66ded07f3d4a6c51ce46d7faaa7008e048ee22f960d12cb4324910ee6ac2476f122a6d56774071e89d_0
     is_ignored: false
     lines: '    hash_object = hashlib.sha256(data.encode(''utf-8''))'
-    message: SHA-256 has reduced security margin under Grover's algorithm. Consider
-      SHA-3 for longer-term security.
+    message: SHA-256 has quantum risks. Consider SHA-3.
     metadata: {}
     metavars: {}
     severity: INFO
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/sha2.py
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/sha2.py
   start:
     col: 19
     line: 7
     offset: 129
-- check_id: detect-hardcoded-keys
-  end:
-    col: 18
-    line: 7
-    offset: 169
-  extra:
-    engine_kind: OSS
-    fingerprint: 1853ba426e41de0ded2867e95437e18525c8e00f12e14bf881dc82da437d73fd98da891a457cbacdf5c1449951c92bbed8e734ef76bd246c4c6fc8f172f0d383_0
-    is_ignored: false
-    lines: key = b'12345678'
-    message: Hard-coded cryptographic keys are insecure. Use secure key management
-      practices.
-    metadata: {}
-    metavars: {}
-    severity: ERROR
-    validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/vulnerable.py
-  start:
-    col: 1
-    line: 7
-    offset: 152
 - check_id: detect-des
   end:
     col: 36
@@ -498,16 +337,15 @@ results:
     offset: 205
   extra:
     engine_kind: OSS
-    fingerprint: de5bfbc5ae2039fedb4f3c4073cdd66198bc41d48a568be8780b073183874cc363975f2ba389148394dd8c39a672fee27eea52548cdb26a1f88b7e0694d76717_0
+    fingerprint: 74146093efd0399296088238f0249661bf620c2e9fdff762603867839edd4d86d49e12d4d7c90c96740fd6f0767559e8406a6b00339476080ed6e83b414ab2a5_0
     is_ignored: false
     lines: cipher = DES.new(key, DES.MODE_ECB)
-    message: DES is insecure due to its small key size and is easily brute-forced.
-      Use AES-256.
+    message: DES is insecure due to its small key size. Use AES-256.
     metadata: {}
     metavars: {}
     severity: ERROR
     validation_state: NO_VALIDATOR
-  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code2/python/vulnerable.py
+  path: /home/ptsag/Documents/hy458-Project/Part2/GayAlex/Vulnerable_Code/python/vulnerable.py
   start:
     col: 10
     line: 8

@@ -16,7 +16,7 @@ from fix_vulnerabilities import fix_single_vulnerability, fix_all_in_case
 app = Flask(__name__)
 app.secret_key = "some_secure_secret_key"
 DATABASE = "semgrep_results.db"
-RUN_SEMGREP_SCRIPT = "runSemGrepWithDB.py"
+RUN_SEMGREP_SCRIPT = "custom_parser.py"
 
 
 def get_connection():
@@ -205,10 +205,11 @@ def import_database(file_stream):
 ########################################
 def run_semgrep_script(scan_name, target):
     cmd = [
-        "python", RUN_SEMGREP_SCRIPT,
-        "--db", DATABASE,
-        "--rules", "rules.yaml",
-        "--target", target
+        "python3", RUN_SEMGREP_SCRIPT,
+        "--target", target,
+        "--db", DATABASE
+        # "--rules", "rules.yaml",
+
     ]
     proc = subprocess.Popen(
         cmd,
@@ -370,44 +371,47 @@ def load_case(case_name):
 @app.route("/rescan_case", methods=["POST"])
 def rescan_case():
     """
-    Re-scan the originally stored directory (scan_directory) for this case,
-    so that we're not hardcoding "." or losing the original path.
+    Remove all existing findings from the DB for this case,
+    then re-run semgrep on the *same* directory as stored,
+    effectively mimicking 'scan_new_directory' steps but keeping the old name/files.
     """
     case_name = request.form.get("case_name", "").strip()
     if not case_name:
         flash("Missing case_name in form!", "error")
         return redirect(url_for("index"))
 
-    # Retrieve the stored directory
-    target_dir = get_scan_directory(case_name)
-    if not target_dir:
-        flash(f"No directory stored for case '{case_name}'. Can't re-scan!", "error")
+    # 1) Look up the existing directory path from DB
+    directory = get_scan_directory(case_name)
+    if not directory:
+        flash(f"No directory stored for case '{case_name}'. Cannot re-scan!", "error")
         return redirect(url_for("index"))
 
-    # Re-scan using the original directory
-    run_semgrep_script(case_name, target_dir)
-    remove_old_and_skip_duplicates(case_name)
+    # 2) Delete all existing rows for this case from the DB, so it's "like new"
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("DELETE FROM semgrep_results WHERE scan_name=?", (case_name,))
+        conn.commit()
+
+    # 3) Re-insert an empty row so we can track new results under the same case name
     ensure_case_row_exists(case_name)
 
-    flash(f"Re-scan completed for '{case_name}' using '{target_dir}'.", "success")
+    # 4) Run Semgrep as if newly scanning
+    run_semgrep_script(case_name, directory)
+    remove_old_and_skip_duplicates(case_name)
+
+    # 5) Re-store the directory in case we need it (same as /scan_new_directory)
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("""
+            UPDATE semgrep_results
+               SET scan_directory=?
+             WHERE scan_name=?
+               AND (scan_directory IS NULL OR scan_directory='')
+        """, (directory, case_name))
+        conn.commit()
+
+    flash(f"Re-scan completed for '{case_name}' by clearing old entries and scanning '{directory}' again.", "success")
     return redirect(url_for("load_case", case_name=case_name))
-
-def find_root_directory(paths):
-    if not paths:
-        return ""
-    common = os.path.dirname(os.path.commonprefix([p.split(os.sep) for p in paths]))
-    return common if common else "."
-
-
-# Find deepest common directory from relative paths
-def find_common_directory(paths):
-    if not paths:
-        print("No relative paths?")
-        return ""
-    split_paths = [p.split(os.sep) for p in paths]
-    common = os.path.commonprefix(split_paths)
-    return os.sep.join(common[:-1]) if len(common) > 0 else ""
-
 
 @app.route("/scan_new_directory", methods=["POST"])
 def scan_new_directory():
@@ -499,6 +503,16 @@ def do_import_db():
     return redirect(url_for("index"))
 
 
+def rm_vulnerability(vuln_id):
+    with get_connection() as conn:
+        c = conn.cursor()
+        c.execute("""
+            DELETE FROM semgrep_results
+            WHERE id = ?;
+        """, (vuln_id,))
+
+        conn.commit()  # Apply the deletion
+    return 0
 ##########################################
 # FIXING VULNERABILITIES ROUTES (Optional)
 ##########################################
@@ -511,11 +525,22 @@ def fix_vulnerability():
         return redirect(url_for("index"))
 
     result = fix_single_vulnerability(int(vuln_id))
-    remove_old_and_skip_duplicates(case_name)
-    ensure_case_row_exists(case_name)
 
-    flash(f"Fix single vulnerability result: {result}", "info")
-    return redirect(url_for("load_case", case_name=case_name))
+    if result.get("status") == "OK":
+        # Remove the successfully fixed vulnerability from the DB
+        rm_vulnerability(int(vuln_id))
+        # Re-scan the correct directory
+        target_dir = get_scan_directory(case_name)
+        print(target_dir)
+        run_semgrep_script(case_name, target_dir)
+        ensure_case_row_exists(case_name)
+        flash(f"Fix single vulnerability result: {result}", "info")
+        return redirect(url_for("load_case", case_name=case_name))
+    else:
+        # For 'SUGGESTED' or 'ERROR', skip re-scan but still show a message
+        flash(f"Fix attempt failed or partial: {result}", "error")
+        return redirect(url_for("load_case", case_name=case_name))
+
 
 
 @app.route("/fix_all_vulnerabilities", methods=["POST"])

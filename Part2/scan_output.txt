@@ -1,0 +1,114 @@
+
+=== Vulnerabilities Report ===
+
+Vulnerability #1:
+  Rule       : detect-weak-aes-c
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/c/vulnerable_c.c
+  Line       : 9
+  Severity   : ERROR
+  Message    : AES keys <256 bits are insecure.
+
+Vulnerability #2:
+  Rule       : detect-des-c
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/c/des_ecb.c
+  Line       : 8
+  Severity   : ERROR
+  Message    : DES is insecure. Use AES-256.
+
+Vulnerability #3:
+  Rule       : detect-sha1-c
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/c/sha1_hash.c
+  Line       : 9
+  Severity   : WARNING
+  Message    : SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3.
+
+Vulnerability #4:
+  Rule       : detect-sha1-c
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/c/all_rules.c
+  Line       : 22
+  Severity   : WARNING
+  Message    : SHA-1 is deprecated due to collision attacks. Use SHA-256 or SHA-3.
+
+Vulnerability #5:
+  Rule       : detect-des-c
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/c/all_rules.c
+  Line       : 34
+  Severity   : ERROR
+  Message    : DES is insecure. Use AES-256.
+
+Vulnerability #6:
+  Rule       : detect-weak-rsa-c
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/c/rsa_short_key.c
+  Line       : 6
+  Severity   : ERROR
+  Message    : RSA <2048 bits is insecure. Use ≥2048.
+
+Vulnerability #7:
+  Rule       : detect-small-rsa
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/python/rsa_short_key.py
+  Line       : 5
+  Severity   : ERROR
+  Message    : RSA < 2048 bits is insecure. Use ≥2048.
+
+Vulnerability #8:
+  Rule       : detect-des
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/python/vulnerable.py
+  Line       : 8
+  Severity   : ERROR
+  Message    : DES is insecure due to its small key size. Use AES-256.
+
+Vulnerability #9:
+  Rule       : detect-des
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/python/des_ecb.py
+  Line       : 4
+  Severity   : ERROR
+  Message    : DES is insecure due to its small key size. Use AES-256.
+
+Vulnerability #10:
+  Rule       : detect-sha2
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/python/sha2.py
+  Line       : 7
+  Severity   : INFO
+  Message    : SHA-256 has quantum risks. Consider SHA-3.
+
+Vulnerability #11:
+  Rule       : detect-md5
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/python/md5_hash.py
+  Line       : 4
+  Severity   : ERROR
+  Message    : Usage of MD5 is insecure due to collision attacks. Use SHA-256 or SHA-3.
+
+Vulnerability #12:
+  Rule       : detect-md5-java
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/java/vulnerable_java.java
+  Line       : 11
+  Severity   : ERROR
+  Message    : MD5 is insecure. Use SHA-256/3.
+
+Vulnerability #13:
+  Rule       : detect-3des-java
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/java/TripleDES.java
+  Line       : 12
+  Severity   : ERROR
+  Message    : Triple DES (3DES) is deprecated due to meet-in-the-middle attacks. Use AES-256.
+
+Vulnerability #14:
+  Rule       : detect-md5-java
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/java/MD5Hash.java
+  Line       : 6
+  Severity   : ERROR
+  Message    : MD5 is insecure. Use SHA-256/3.
+
+Vulnerability #15:
+  Rule       : detect-rsa-no-padding-java
+  File       : /home/ptsag/Documents/hy458-Project/Part2/Vulnerable_Code/java/RSANoPadding.java
+  Line       : 14
+  Severity   : ERROR
+  Message    : No padding detected
+
+=== Scan Summary ===
+  C: 6 vulnerabilities out of 5 scanned ['all_rules.c', 'des_ecb.c', 'rsa_short_key.c', 'sha1_hash.c', 'vulnerable_c.c']
+  Python: 5 vulnerabilities out of 5 scanned ['des_ecb.py', 'md5_hash.py', 'rsa_short_key.py', 'sha2.py', 'vulnerable.py']
+  Java: 4 vulnerabilities out of 4 scanned ['MD5Hash.java', 'RSANoPadding.java', 'TripleDES.java', 'vulnerable_java.java']
+
+Enter path to the DB file to save results (or press ENTER to skip DB export): 
